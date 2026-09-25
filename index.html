@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  DASHBOARD PERSONNEL POUR IPAD 4 (iOS 10.3.3 / Safari mobile ancien)
+  ============================================================================
+  Ce fichier est 100% autonome : un seul index.html avec le CSS et le JS
+  intégrés. Vous pouvez l'héberger tel quel sur GitHub Pages.
+
+  IMPORTANT POUR LE NÉOPHYTE :
+  - Tout le JavaScript est écrit en syntaxe "ancienne" (ES5) : var au lieu
+    de let/const, function() au lieu de () =>, concaténation de chaînes
+    avec "+" au lieu des templates `${}`. C'est fait exprès pour que
+    Safari sur iOS 10.3.3 (qui est très ancien) puisse tout exécuter
+    sans planter.
+  - Cherchez le mot "A CONFIGURER" dans les commentaires ci-dessous :
+    ce sont tous les endroits où VOUS devez remplacer une valeur
+    (identifiant d'agenda, URL de stockage de liste de courses, etc.)
+  ============================================================================
+-->
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<!-- viewport fixe : on cible précisément l'écran 1024x768 de l'iPad 4 en paysage -->
+<meta name="viewport" content="width=1024, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>✦ Momo's Dashboard ✦</title>
+
+<style>
+/* ==========================================================================
+   RESET DE BASE
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* On désactive la sélection de texte façon "app" plutôt que "page web" */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 1024px;
+  height: 768px;
+  overflow: hidden; /* pas de scroll : c'est un dashboard fixe sur un écran fixe */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #F2F2F2;
+  /* Le dégradé de fond est en fait piloté par JavaScript (voir plus bas :
+     la fonction updateBackground()), mais on met une valeur par défaut ici
+     au cas où le JS mettrait du temps à démarrer. */
+  background: linear-gradient(180deg, #362E68 0%, #0B0E28 100%);
+  transition: background 3s ease; /* transition douce quand l'heure change de tranche */
+}
+
+/* ==========================================================================
+   FOND ETOILE (ciel scintillant en CSS pur)
+   ========================================================================== */
+#stars-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 1024px;
+  height: 768px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Chaque étoile est un petit <div class="star"> positionné en JS avec un
+   style inline (top/left/taille/délai). Ici on ne définit que son look. */
+.star {
+  position: absolute;
+  background: #FFFFFF;
+  border-radius: 50%;
+  opacity: 0.2;
+  animation-name: twinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.15; }
+  50%  { opacity: 0.9; }
+  100% { opacity: 0.15; }
+}
+
+/* ==========================================================================
+   MISE EN PAGE GENERALE : grille 2 colonnes (37% / 63%)
+   Flexbox est supporté par iOS 10, on évite juste la propriété "gap"
+   (non supportée sur les vieux Safari) et on utilise des margins à la place.
+   ========================================================================== */
+.container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  width: 1024px;
+  height: 768px;
+  padding: 14px;
+}
+
+.col-left {
+  width: 37%;
+  display: flex;
+  flex-direction: column;
+}
+
+.col-right {
+  width: 63%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 14px; /* remplace le "gap" */
+}
+
+/* Bloc générique "widget" : cadre fin blanc/gris, fond noir semi-transparent */
+.widget {
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.35);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.widget-title {
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #C7C7CC; /* gris argenté */
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   COLONNE GAUCHE
+   ========================================================================== */
+
+/* 1) Agenda : hauteur limitée à ~290px comme demandé */
+.widget.agenda {
+  height: 290px;
+  display: flex;
+  flex-direction: column;
+}
+.agenda iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  background: #111;
+}
+.agenda-fallback {
+  font-size: 12px;
+  color: #999;
+  line-height: 1.4;
+}
+
+/* 2) Bloc rappel conditionnel : masqué par défaut, affiché seulement par le JS
+   au bon créneau horaire (voir fonction checkReminder()) */
+.widget.reminder {
+  display: none; /* le JS passera à "block" si besoin */
+  border-color: #E5C158; /* léger accent doré/argenté pour attirer l'oeil */
+  background: rgba(60,50,10,0.35);
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 14px;
+}
+
+/* 3) Liste de courses */
+.widget.shopping {
+  flex: 1; /* prend le reste de la place disponible dans la colonne gauche */
+  overflow: hidden;
+}
+#shopping-list {
+  list-style: none;
+  font-size: 15px;
+  line-height: 1.9;
+  max-height: 220px;
+  overflow-y: auto;
+}
+#shopping-list li {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 3px 0;
+}
+#shopping-list li.done {
+  color: #777;
+  text-decoration: line-through;
+}
+.shopping-status {
+  font-size: 11px;
+  color: #888;
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   COLONNE DROITE
+   ========================================================================== */
+
+/* En-tête : date + horloge géante */
+.header {
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.35);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 12px;
+  position: relative;
+}
+.date-fr {
+  font-size: 20px;
+  color: #D0D0D5;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  text-transform: capitalize;
+}
+.clock {
+  font-size: 92px;
+  font-weight: 200;
+  letter-spacing: 4px;
+  color: #FFFFFF;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Indicateur email discret, en haut à droite du bandeau, masqué par défaut */
+.email-indicator {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 14px;
+  color: #E5C158;
+  display: none; /* activer via JS/commentaire plus bas si vous configurez un flux mail */
+}
+
+/* Rangée météo + lune, côte à côte */
+.row-widgets {
+  display: flex;
+  flex-direction: row;
+}
+.row-widgets .widget {
+  width: 50%;
+}
+.row-widgets .widget:first-child {
+  margin-right: 7px;
+}
+.row-widgets .widget:last-child {
+  margin-left: 7px;
+}
+
+.weather-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.weather-temp {
+  font-size: 40px;
+  font-weight: 300;
+}
+.weather-icon {
+  font-size: 40px;
+}
+.weather-sub {
+  font-size: 12px;
+  color: #B5B5BA;
+  margin-top: 6px;
+}
+
+.moon-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.moon-emoji {
+  font-size: 44px;
+}
+.moon-label {
+  font-size: 12px;
+  color: #B5B5BA;
+  margin-top: 4px;
+}
+
+/* Transports RATP */
+.metro-line {
+  display: inline-block;
+  background: #F2F2F2;
+  color: #000;
+  font-weight: bold;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.metro-direction {
+  font-size: 13px;
+  color: #D0D0D5;
+  margin-top: 6px;
+}
+.metro-times {
+  font-size: 13px;
+  color: #FFFFFF;
+  margin-left: 28px;
+}
+.metro-error {
+  font-size: 12px;
+  color: #999;
+  font-style: italic;
+}
+
+/* Audio / Radios */
+.audio-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.radio-btn {
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.05);
+  color: #F2F2F2;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin: 4px 6px 4px 0;
+}
+.radio-btn.active {
+  background: #FFFFFF;
+  color: #000000;
+  border-color: #FFFFFF;
+}
+.audio-status {
+  font-size: 12px;
+  color: #999;
+  margin-top: 8px;
+}
+.spotify-shortcut {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #C7C7CC;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+/* Petites étoiles décoratives dans les titres : simples caractères ✦ ✧ */
+.deco-star {
+  color: #C7C7CC;
+  opacity: 0.8;
+}
+</style>
+</head>
+<body>
+
+<!-- Conteneur du ciel étoilé, rempli dynamiquement par JS -->
+<div id="stars-bg"></div>
+
+<div class="container">
+
+  <!-- ========================= COLONNE GAUCHE ========================= -->
+  <div class="col-left">
+
+    <!-- 1. AGENDA PERSONNEL -->
+    <div class="widget agenda">
+      <div class="widget-title"><span class="deco-star">✦</span> Mon agenda <span class="deco-star">✦</span></div>
+
+      <!--
+        A CONFIGURER : Agenda Google intégré.
+        1. Ouvrez Google Agenda sur ordinateur > Paramètres de l'agenda
+           que vous voulez afficher.
+        2. Descendez jusqu'à "Intégrer l'agenda" : vous y trouverez un
+           "ID de l'agenda" qui ressemble à
+           "votreadresse@gmail.com" ou "xxxxxxx@group.calendar.google.com".
+        3. Remplacez CALENDAR_ID ci-dessous par cet identifiant
+           (pensez à l'encoder : remplacez "@" par "%40").
+        4. Vérifiez aussi dans les paramètres de partage de l'agenda que
+           celui-ci est bien "Rendre disponible publiquement" ou au moins
+           partagé, sinon l'iframe restera vide.
+      -->
+      
+        <iframe src="https://calendar.google.com/calendar/embed?src=morgane.bonvin%40gmail.com&ctz=Europe%2FBrussels" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+
+      <!-- Si vous préférez ne pas utiliser d'iframe Google, vous pouvez
+           supprimer l'iframe ci-dessus et afficher une liste HTML simple
+           ici à la place (ex: <div class="agenda-fallback">Pas de RDV
+           aujourd'hui</div>). -->
+    </div>
+
+    <!-- 2. RAPPEL CONDITIONNEL (masqué/affiché par JS selon jour + heure) -->
+    <div class="widget reminder" id="reminder-block">
+      <!-- Rempli dynamiquement par la fonction checkReminder() -->
+    </div>
+
+    <!-- 3. LISTE DE COURSES -->
+    <div class="widget shopping">
+      <div class="widget-title"><span class="deco-star">✦</span> Liste de courses <span class="deco-star">✦</span></div>
+      <ul id="shopping-list">
+        <li>Chargement…</li>
+      </ul>
+      <div class="shopping-status" id="shopping-status"></div>
+    </div>
+
+  </div>
+
+  <!-- ========================= COLONNE DROITE ========================= -->
+  <div class="col-right">
+
+    <!-- ENTETE : date + horloge + indicateur mail -->
+    <div class="header">
+      <span class="email-indicator" id="email-indicator" title="Nouveaux emails">✉</span>
+      <div class="date-fr" id="date-fr">--</div>
+      <div class="clock" id="clock">--:--:--</div>
+    </div>
+
+    <!-- METEO + LUNE côte à côte -->
+    <div class="row-widgets">
+      <div class="widget weather">
+        <div class="widget-title">Météo</div>
+        <div class="weather-main">
+          <div class="weather-temp" id="weather-temp">--°</div>
+          <div class="weather-icon" id="weather-icon">☁️</div>
+        </div>
+        <div class="weather-sub" id="weather-desc">Chargement…</div>
+        <div class="weather-sub" id="weather-sun">Lever / Coucher : --:-- / --:--</div>
+      </div>
+
+      <div class="widget moon">
+        <div class="widget-title">Lune</div>
+        <div class="moon-main">
+          <div class="moon-emoji" id="moon-emoji">🌑</div>
+          <div class="moon-label" id="moon-label">Calcul…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSPORTS RATP -->
+    <div class="widget transport">
+      <div class="widget-title">Métro — Philippe Auguste (ligne 2)</div>
+      <div id="ratp-content">
+        <div class="metro-error">Chargement des horaires…</div>
+      </div>
+    </div>
+
+    <!-- AUDIO / RADIOS -->
+    <div class="widget audio">
+      <div class="widget-title"><span class="deco-star">✦</span> Radios <span class="deco-star">✦</span></div>
+      <div class="audio-buttons">
+        <button class="radio-btn" id="btn-nova" onclick="playRadio('nova')">Radio Nova</button>
+        <button class="radio-btn" id="btn-tsfjazz" onclick="playRadio('tsfjazz')">TSF Jazz</button>
+        <button class="radio-btn" id="btn-fip" onclick="playRadio('fip')">Fip</button>
+        <button class="radio-btn" id="btn-inter" onclick="playRadio('inter')">France Inter</button>
+        <button class="radio-btn" id="btn-stop" onclick="stopRadio()">■ Stop</button>
+      </div>
+      <audio id="radio-player"></audio>
+      <div class="audio-status" id="audio-status">Aucune radio en cours</div>
+
+      <!--
+        A CONFIGURER (optionnel) : raccourci Spotify.
+        Remplacez l'URI ci-dessous par l'URI d'une playlist Spotify précise
+        si vous voulez, ex : spotify:playlist:VOTRE_ID_PLAYLIST
+        Sur iPad, ce lien tentera d'ouvrir l'app Spotify si elle est
+        installée, sinon il ouvrira open.spotify.com.
+      -->
+      <a class="spotify-shortcut" href="https://open.spotify.com/playlist/1AT4NGzhEMyMJVxIc0tBAE?si=V1zcCibZT2WQPp9Va2R0uw" target="_blank">▶ Ouvrir Spotify</a>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+/* ============================================================================
+   TOUT LE JAVASCRIPT EST EN ES5 (compatible Safari iOS 10.3.3)
+   Pas de let/const, pas de =>, pas de template strings, pas d'async/await.
+   ============================================================================ */
+
+
+/* ----------------------------------------------------------------------
+   0. UTILITAIRES GÉNÉRAUX
+   ---------------------------------------------------------------------- */
+
+// Ajoute un zéro devant les nombres < 10 (equiv. de padStart, non
+// disponible en ES5 / iOS 10)
+function pad2(n) {
+  n = Math.floor(n);
+  if (n < 10) { return "0" + n; }
+  return "" + n;
+}
+
+// Petit wrapper XMLHttpRequest (équivalent "fetch" pour ES5), avec
+// callback de succès et callback d'erreur.
+function xhrGetJSON(url, onSuccess, onError) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+  xhr.timeout = 10000; // 10 secondes : au-delà, on considère que ça a échoué
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          var data = JSON.parse(xhr.responseText);
+          onSuccess(data);
+        } catch (e) {
+          if (onError) { onError(e); }
+        }
+      } else {
+        if (onError) { onError(new Error("HTTP " + xhr.status)); }
+      }
+    }
+  };
+  xhr.onerror = function () {
+    if (onError) { onError(new Error("network error")); }
+  };
+  xhr.send();
+}
+
+
+/* ----------------------------------------------------------------------
+   1. CIEL ETOILE (généré une seule fois au chargement)
+   ---------------------------------------------------------------------- */
+function buildStars() {
+  var container = document.getElementById("stars-bg");
+  var starCount = 70; // nombre d'étoiles à l'écran, ajustable
+  var html = "";
+  var i;
+  for (i = 0; i < starCount; i++) {
+    var size = Math.random() * 2 + 1; // entre 1 et 3px
+    var top = Math.random() * 768;
+    var left = Math.random() * 1024;
+    var duration = (Math.random() * 3 + 2).toFixed(1); // entre 2 et 5s
+    var delay = (Math.random() * 4).toFixed(1);
+    html += '<div class="star" style="' +
+      "width:" + size + "px;" +
+      "height:" + size + "px;" +
+      "top:" + top + "px;" +
+      "left:" + left + "px;" +
+      "animation-duration:" + duration + "s;" +
+      "animation-delay:" + delay + "s;" +
+      '"></div>';
+  }
+  container.innerHTML = html;
+}
+
+
+/* ----------------------------------------------------------------------
+   2. DATE FRANÇAISE + HORLOGE + DEGRADE DE FOND SELON L'HEURE
+   ---------------------------------------------------------------------- */
+var JOURS_FR = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+var MOIS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+                "août", "septembre", "octobre", "novembre", "décembre"];
+
+function updateClockAndDate() {
+  var now = new Date();
+
+  // Date en français, ex: "vendredi 25 septembre 2026"
+  var dateStr = JOURS_FR[now.getDay()] + " " + now.getDate() + " " +
+                MOIS_FR[now.getMonth()] + " " + now.getFullYear();
+  document.getElementById("date-fr").innerHTML = dateStr;
+
+  // Horloge géante HH:MM:SS
+  var timeStr = pad2(now.getHours()) + ":" + pad2(now.getMinutes()) + ":" + pad2(now.getSeconds());
+  document.getElementById("clock").innerHTML = timeStr;
+
+  return now;
+}
+
+// Dégradé de fond : bleu-violet le jour (6h-18h), presque noir la nuit.
+// On ne réapplique le style que si la tranche change, pour laisser jouer
+// la transition CSS "background 3s ease" en douceur.
+var currentBgMode = null;
+function updateBackground(now) {
+  var hour = now.getHours();
+  var isDay = (hour >= 6 && hour < 18);
+  var mode = isDay ? "day" : "night";
+  if (mode === currentBgMode) { return; } // rien à faire, on évite de tout recalculer
+  currentBgMode = mode;
+  if (isDay) {
+    document.body.style.background = "linear-gradient(180deg, #362E68 0%, #0B0E28 100%)";
+  } else {
+    document.body.style.background = "linear-gradient(180deg, #080C19 0%, #000000 100%)";
+  }
+}
+
+
+/* ----------------------------------------------------------------------
+   3. RAPPELS CONDITIONNELS
+   Lundi 06h-12h  -> "Prends ta B12"
+   Vendredi 06h-12h -> "Arrose les plantes"
+   Sinon -> bloc masqué
+   ---------------------------------------------------------------------- */
+function checkReminder(now) {
+  var day = now.getDay();   // 0 = dimanche, 1 = lundi, ... 5 = vendredi
+  var hour = now.getHours();
+  var block = document.getElementById("reminder-block");
+  var message = null;
+
+  if (day === 1 && hour >= 6 && hour < 12) {
+    message = "✦ Prends ta B12 ✦";
+  } else if (day === 5 && hour >= 6 && hour < 12) {
+    message = "✦ Arrose les plantes ✦";
+  }
+
+  if (message) {
+    block.innerHTML = message;
+    block.style.display = "block";
+  } else {
+    block.style.display = "none";
+  }
+}
+
+
+/* ----------------------------------------------------------------------
+   4. INDICATEUR EMAIL (désactivé par défaut)
+   ---------------------------------------------------------------------- */
+// A CONFIGURER (optionnel) : si un jour vous voulez afficher un petit
+// indicateur "✉" quand vous avez des mails non lus, il faudrait un
+// service tiers capable de vous donner ce nombre sans exposer votre
+// mot de passe (ex: un petit script serveur perso, ou un service comme
+// EmailListVerify / un webhook Zapier qui écrit le nombre dans un
+// stockage clé-valeur, à lire ici de la même façon que la liste de
+// courses ci-dessous). Par défaut, l'indicateur reste masqué :
+function updateEmailIndicator() {
+  var el = document.getElementById("email-indicator");
+  // Exemple si vous branchez un jour un vrai flux :
+  // xhrGetJSON("https://VOTRE-SOURCE/unread-count.json", function(data){
+  //   if (data.unread > 0) { el.style.display = "inline-block"; }
+  //   else { el.style.display = "none"; }
+  // });
+  el.style.display = "none"; // laissé masqué tant que rien n'est configuré
+}
+
+
+/* ----------------------------------------------------------------------
+   5. LISTE DE COURSES SYNCHRONISEE DEPUIS LE TELEPHONE
+   ----------------------------------------------------------------------
+   METHODE RECOMMANDEE (gratuite, sans compte complexe) : npoint.io
+
+   ETAPE PAR ETAPE :
+   1. Depuis votre téléphone (ou ordinateur), allez sur https://www.npoint.io
+   2. Cliquez sur "Create a new bin" (créer un nouveau "bin").
+   3. Collez un contenu JSON de départ, par exemple :
+      [
+        { "text": "Lait", "done": false },
+        { "text": "Pain", "done": false },
+        { "text": "Oeufs", "done": true }
+      ]
+   4. Cliquez sur "Save". npoint vous donne une URL du type :
+      https://api.npoint.io/abcd1234efgh5678
+   5. Copiez cette URL et collez-la ci-dessous dans la variable
+      SHOPPING_LIST_URL (remplacez la valeur d'exemple).
+   6. Pour METTRE A JOUR la liste depuis votre téléphone plus tard,
+      retournez simplement sur https://www.npoint.io, rouvrez votre bin
+      (gardez le lien dans vos favoris ou notes) et modifiez le JSON,
+      puis "Save" à nouveau. Le dashboard de l'iPad se remet à jour tout
+      seul (il revérifie toutes les 30 secondes, voir plus bas).
+
+   ALTERNATIVE PLUS ROBUSTE : JSONBin.io
+   - Créez un compte gratuit sur https://jsonbin.io
+   - Créez un "bin" et récupérez son BIN_ID + votre X-Master-Key (clé API).
+   - Le principe est identique, mais il faut alors envoyer la clé API
+     dans les en-têtes de la requête XMLHttpRequest, par exemple :
+       xhr.setRequestHeader("X-Master-Key", "VOTRE_CLE_API");
+     Cela permet d'avoir une liste privée (non modifiable par n'importe
+     qui connaissant l'URL), contrairement à npoint.io qui est public.
+   ---------------------------------------------------------------------- */
+
+// A CONFIGURER : remplacez cette URL par celle de VOTRE bin npoint.io
+var SHOPPING_LIST_URL = "https://api.npoint.io/29ddc31ffc583215b72e";
+
+function refreshShoppingList() {
+  var statusEl = document.getElementById("shopping-status");
+  xhrGetJSON(
+    SHOPPING_LIST_URL,
+    function (data) {
+      var listEl = document.getElementById("shopping-list");
+      if (!data || !data.length) {
+        listEl.innerHTML = "<li>Liste vide</li>";
+      } else {
+        var html = "";
+        var i;
+        for (i = 0; i < data.length; i++) {
+          var item = data[i];
+          var cls = item.done ? " class=\"done\"" : "";
+          html += "<li" + cls + ">" + item.text + "</li>";
+        }
+        listEl.innerHTML = html;
+      }
+      var now = new Date();
+      statusEl.innerHTML = "Mis à jour à " + pad2(now.getHours()) + ":" + pad2(now.getMinutes());
+    },
+    function () {
+      statusEl.innerHTML = "Synchronisation impossible (vérifiez SHOPPING_LIST_URL)";
+    }
+  );
+}
+
+
+/* ----------------------------------------------------------------------
+   6. METEO & LUNE (Open-Meteo, aucune clé API nécessaire)
+   ---------------------------------------------------------------------- */
+
+// A CONFIGURER si besoin : coordonnées de Paris par défaut.
+// Remplacez par vos propres coordonnées si vous n'habitez pas Paris.
+var WEATHER_LAT = 48.8566;
+var WEATHER_LON = 2.3522;
+
+// Table simplifiée de correspondance "code météo Open-Meteo" -> icône + texte
+// (codes officiels WMO ; liste volontairement simplifiée pour rester lisible)
+function decodeWeatherCode(code) {
+  var table = {
+    0: { icon: "☀️", label: "Ciel dégagé" },
+    1: { icon: "🌤️", label: "Plutôt dégagé" },
+    2: { icon: "⛅", label: "Partiellement nuageux" },
+    3: { icon: "☁️", label: "Couvert" },
+    45: { icon: "🌫️", label: "Brouillard" },
+    48: { icon: "🌫️", label: "Brouillard givrant" },
+    51: { icon: "🌦️", label: "Bruine légère" },
+    53: { icon: "🌦️", label: "Bruine" },
+    55: { icon: "🌦️", label: "Bruine forte" },
+    61: { icon: "🌧️", label: "Pluie légère" },
+    63: { icon: "🌧️", label: "Pluie" },
+    65: { icon: "🌧️", label: "Pluie forte" },
+    71: { icon: "🌨️", label: "Neige légère" },
+    73: { icon: "🌨️", label: "Neige" },
+    75: { icon: "❄️", label: "Neige forte" },
+    80: { icon: "🌦️", label: "Averses" },
+    81: { icon: "🌦️", label: "Averses fortes" },
+    95: { icon: "⛈️", label: "Orage" },
+    96: { icon: "⛈️", label: "Orage + grêle" },
+    99: { icon: "⛈️", label: "Orage violent" }
+  };
+  if (table[code]) { return table[code]; }
+  return { icon: "❓", label: "Inconnu" };
+}
+
+function refreshWeather() {
+  var url = "https://api.open-meteo.com/v1/forecast?latitude=" + WEATHER_LAT +
+    "&longitude=" + WEATHER_LON +
+    "&current_weather=true&daily=sunrise,sunset&timezone=Europe%2FParis";
+
+  xhrGetJSON(
+    url,
+    function (data) {
+      if (!data.current_weather) { throw new Error("format inattendu"); }
+      var temp = Math.round(data.current_weather.temperature);
+      var code = data.current_weather.weathercode;
+      var info = decodeWeatherCode(code);
+
+      document.getElementById("weather-temp").innerHTML = temp + "°";
+      document.getElementById("weather-icon").innerHTML = info.icon;
+      document.getElementById("weather-desc").innerHTML = info.label;
+
+      // Lever / coucher du soleil (format ISO -> on extrait juste HH:MM)
+      if (data.daily && data.daily.sunrise && data.daily.sunrise[0]) {
+        var sunrise = data.daily.sunrise[0].substr(11, 5);
+        var sunset = data.daily.sunset[0].substr(11, 5);
+        document.getElementById("weather-sun").innerHTML =
+          "Lever / Coucher : " + sunrise + " / " + sunset;
+      }
+    },
+    function () {
+      // Repli propre en cas d'indisponibilité de l'API
+      document.getElementById("weather-desc").innerHTML = "Météo indisponible";
+    }
+  );
+}
+
+// Calcul de la phase de la lune, sans dépendance externe.
+// Principe : on mesure le temps écoulé depuis une nouvelle lune connue
+// et on divise par la durée d'un cycle lunaire (~29,53 jours).
+function getMoonPhase(date) {
+  var synodicMonth = 29.530588853; // durée moyenne d'un cycle lunaire, en jours
+  // Nouvelle lune de référence : 6 janvier 2000, 18h14 UTC
+  var knownNewMoon = Date.UTC(2000, 0, 6, 18, 14, 0);
+  var diffDays = (date.getTime() - knownNewMoon) / 86400000;
+  var phase = diffDays % synodicMonth;
+  if (phase < 0) { phase += synodicMonth; }
+  var fraction = phase / synodicMonth; // valeur entre 0 et 1
+
+  var emojis = ["🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘"];
+  var labels = ["Nouvelle lune", "Premier croissant", "Premier quartier",
+                "Gibbeuse croissante", "Pleine lune", "Gibbeuse décroissante",
+                "Dernier quartier", "Dernier croissant"];
+
+  var index = Math.floor(fraction * 8 + 0.5) % 8; // arrondi sur 8 phases
+  return { emoji: emojis[index], label: labels[index] };
+}
+
+function refreshMoon() {
+  var moon = getMoonPhase(new Date());
+  document.getElementById("moon-emoji").innerHTML = moon.emoji;
+  document.getElementById("moon-label").innerHTML = moon.label;
+}
+
+
+/* ----------------------------------------------------------------------
+   7. TRANSPORTS RATP (métro ligne 2, station Philippe Auguste)
+   ---------------------------------------------------------------------- */
+var RATP_URL = "https://api-ratp.pierre-grimaud.fr/v4/schedules/metros/2/philippe+auguste/A+R";
+
+function refreshRatp() {
+  var container = document.getElementById("ratp-content");
+  xhrGetJSON(
+    RATP_URL,
+    function (data) {
+      if (!data.result || !data.result.schedules || !data.result.schedules.length) {
+        throw new Error("pas de données");
+      }
+      var schedules = data.result.schedules;
+      var html = "";
+      var i;
+      // On regroupe par "direction" pour un affichage clair
+      var byDirection = {};
+      var order = [];
+      for (i = 0; i < schedules.length; i++) {
+        var s = schedules[i];
+        var dir = s.destination || "Direction inconnue";
+        if (!byDirection[dir]) {
+          byDirection[dir] = [];
+          order.push(dir);
+        }
+        byDirection[dir].push(s.message);
+      }
+      for (i = 0; i < order.length; i++) {
+        var d = order[i];
+        html += '<div class="metro-direction"><span class="metro-line">2</span>' + d + "</div>";
+        html += '<div class="metro-times">' + byDirection[d].join(" &nbsp;•&nbsp; ") + "</div>";
+      }
+      container.innerHTML = html;
+    },
+    function () {
+      container.innerHTML = '<div class="metro-error">Horaires indisponibles pour le moment</div>';
+    }
+  );
+}
+
+
+/* ----------------------------------------------------------------------
+   8. AUDIO / RADIOS EN DIRECT
+   ----------------------------------------------------------------------
+   NOTE : les URL de flux radio changent parfois avec le temps. Si un
+   bouton ne fonctionne plus, cherchez sur le site de la radio concernée
+   "flux direct mp3" ou "écouter en direct" pour retrouver l'URL à jour,
+   et remplacez-la ci-dessous.
+   ---------------------------------------------------------------------- */
+var RADIO_STREAMS = {
+  nova: "https://novazz.ice.infomaniak.ch/novazz.mp3",
+  tsfjazz: "https://tsfjazz.ice.infomaniak.ch/tsfjazz-128.mp3",
+  fip: "https://icecast.radiofrance.fr/fip-midfi.mp3",
+  inter: "https://icecast.radiofrance.fr/franceinter-midfi.mp3"
+};
+
+var RADIO_LABELS = {
+  nova: "Radio Nova",
+  tsfjazz: "TSF Jazz",
+  fip: "Fip",
+  inter: "France Inter"
+};
+
+function clearActiveButtons() {
+  var ids = ["btn-nova", "btn-tsfjazz", "btn-fip", "btn-inter"];
+  var i;
+  for (i = 0; i < ids.length; i++) {
+    document.getElementById(ids[i]).className = "radio-btn";
+  }
+}
+
+function playRadio(key) {
+  var player = document.getElementById("radio-player");
+  var statusEl = document.getElementById("audio-status");
+  var url = RADIO_STREAMS[key];
+  if (!url) { return; }
+
+  player.src = url;
+  player.play();
+
+  clearActiveButtons();
+  var btn = document.getElementById("btn-" + key);
+  if (btn) { btn.className = "radio-btn active"; }
+
+  statusEl.innerHTML = "En cours : " + RADIO_LABELS[key];
+}
+
+function stopRadio() {
+  var player = document.getElementById("radio-player");
+  player.pause();
+  player.src = "";
+  clearActiveButtons();
+  document.getElementById("audio-status").innerHTML = "Aucune radio en cours";
+}
+
+
+/* ----------------------------------------------------------------------
+   9. INITIALISATION GENERALE
+   ---------------------------------------------------------------------- */
+function initDashboard() {
+  buildStars();
+
+  // Horloge + date + fond : mise à jour chaque seconde
+  var now = updateClockAndDate();
+  updateBackground(now);
+  checkReminder(now);
+  setInterval(function () {
+    var n = updateClockAndDate();
+    updateBackground(n);
+    checkReminder(n);
+  }, 1000);
+
+  // Email (désactivé par défaut)
+  updateEmailIndicator();
+
+  // Liste de courses : premier chargement, puis toutes les 30 secondes
+  refreshShoppingList();
+  setInterval(refreshShoppingList, 30000);
+
+  // Météo : premier chargement, puis toutes les 15 minutes (l'API n'a pas
+  // besoin d'être interrogée plus souvent que ça)
+  refreshWeather();
+  setInterval(refreshWeather, 15 * 60 * 1000);
+
+  // Lune : la phase change lentement, un rafraîchissement toutes les
+  // heures suffit largement
+  refreshMoon();
+  setInterval(refreshMoon, 60 * 60 * 1000);
+
+  // RATP : premier chargement, puis toutes les 60 secondes (données "temps réel")
+  refreshRatp();
+  setInterval(refreshRatp, 60000);
+}
+
+// On attend que le DOM soit prêt avant de tout lancer. On évite
+// addEventListener("DOMContentLoaded", ...) avec une fonction fléchée,
+// mais une function() classique fonctionne très bien sur iOS 10.
+document.addEventListener("DOMContentLoaded", function () {
+  initDashboard();
+});
+
+</script>
+</body>
+</html>
