@@ -1,69 +1,1812 @@
-Modifie mon code HTML/JS/CSS pour y intégrer les fonctionnalités suivantes :
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  DASHBOARD PERSONNEL POUR IPAD 4 (iOS 10.3.3 / Safari mobile ancien)
+  ============================================================================
+  Fichier 100% autonome : un seul index.html, prêt pour GitHub Pages.
 
-1. **Ajout d'un minuteur de cuisine classique :**
-- Crée un second minuteur placé juste à droite du minuteur Pomodoro existant.
-- Donne-lui pour titre : "let's get cookin'".
-- Il doit conserver le même style graphique rétro / pixel art que le reste de l'interface (boutons, bordures, typographie).
+  CE QUI CHANGE DANS CETTE VERSION (v4 — "pixel art rétro") :
+  1) Habillage visuel façon pixel art / arcade rétro : police pixel
+     (Silkscreen pour les titres/boutons/horloge, VT323 pour le
+     texte courant, plus lisible en grande taille), bordures nettes
+     sans arrondi, ombres portées "en bloc" façon jeu 8-bit, boutons
+     avec effet d'enfoncement au clic. La disposition générale (colonnes
+     40/60, fond dégradé continu, ciel étoilé) est conservée à l'identique.
+  2) Suppression complète des widgets Agenda, Horaires RATP (métro) et
+     Spotify — HTML, CSS et JavaScript associés retirés.
+  3) Refonte du bloc Météo/Lune/Soleil : la météo du jour prend plus de
+     place, une ligne de prévisions sur 4 jours (icône + min/max, en
+     plus petit) est ajoutée dessous, et la lune + le lever/coucher du
+     soleil sont affichés à droite du bloc. Les libellés texte "Lever"
+     et "Coucher" ont été retirés (seuls les horaires avec une icône
+     restent affichés).
+  4) Ajout d'une barre de progression sur 28 jours, avec une petite
+     fleur cliquable à côté qui réinitialise le cycle (stockage dans
+     localStorage, donc persiste entre les rechargements).
+  5) Ajout d'un bouton "Je m'ennuie" : à chaque clic, une activité est
+     tirée au sort parmi une liste de 12 idées et affichée en dessous.
 
-2. **Ajout d'un encart de phrase saisonnière dynamique au-dessus des radiations (ou dans l'espace approprié de la colonne de gauche/droite) :**
-- Mets en place une logique qui calcule ou détecte le numéro de la semaine en cours (de 1 à 52) pour afficher automatiquement la phrase correspondante parmi la liste fournie ci-dessous.
-- Chaque phrase affichée doit être obligatoirement accompagnée d'un émoji pertinent correspondant au texte.
-- Liste des phrases par semaine :
-* Semaine 1 : Les chauves-souris entrent en léthargie au fond des abris souterrains. 🦇
-* Semaine 2 : Le renard roux commence sa période de reproduction et marque son territoire. 🦊
-* Semaine 3 : Apparition des premiers chatons sur les branches des noisetiers. 🌿
-* Semaine 4 : Les mésanges explorent activement les sols à la recherche de nourriture. 🐦
-* Semaine 5 : Premiers rejets de terre visibles en surface laissés par l'activité des taupes. 🌍
-* Semaine 6 : Sortie des premiers crocus et perce-neige hors de la terre froide. 🌸
-* Semaine 7 : Début de la migration printanière des amphibiens vers les mares de ponte. 🐸
-* Semaine 8 : Le rouge-gorge chante de bon matin pour délimiter son territoire. 🎶
-* Semaine 9 : La sève brute remonte dans les troncs des arbres à feuilles caduques. 🌳
-* Semaine 10 : Les anémones sylvies fleurissent timidement dans les sous-bois. 🌼
-* Semaine 11 : Équinoxe de printemps 20 mars — Durée égale entre le jour et la nuit. ⚖️
-* Semaine 12 : Arrivée des premières hirondelles de cheminée et des pouillets véloces. ✈️
-* Semaine 13 : Les bourgeons des hêtres et des chênes s'ouvrent sur un feuillage neuf. 🌱
-* Semaine 14 : Les lilas en fleurs embaument l'air tiède de la saison. 💜
-* Semaine 15 : Les reines bourdons recherchent un abri pour installer leur colonie. 🐝
-* Semaine 16 : Période active de construction des nids et de ponte chez les oiseaux forestiers. 🪺
-* Semaine 17 : Les prairies sauvages se couvrent d'herbes hautes et denses. 🌾
-* Semaine 18 : Émergence des premières libellules au bord des points d'eau. 🦋
-* Semaine 19 : Les jacinthes sauvages forment un tapis bleu dans les forêts. 🪻
-* Semaine 20 : Naissance des premiers faons de chevreuil cachés dans les herbes. 🦌
-* Semaine 21 : Période de nourrissage intense des oisillons par les parents. 🐦‍⬛
-* Semaine 22 : Apparition des premiers vers luisants dans les hautes herbes le soir. ✨
-* Semaine 23 : Solstice d'été 21 juin 2026 — Journée la plus longue de l'année. ☀️
-* Semaine 24 : Apparition et maturité des premières fraises des bois. 🍓
-* Semaine 25 : Les cigales débutent leur chant caractéristique en zone chaude. 🎶
-* Semaine 26 : Éclosion des œufs de mantes religieuses dans les herbes. 🦗
-* Semaine 27 : La terre sèche sous le soleil estival et la végétation ralentit. 🏜️
-* Semaine 28 : Pic de chaleur de l'été, la faune cherche l'ombre aux heures chaudes. 🥵
-* Semaine 29 : Passage de la pluie d'étoiles filantes des Perséides dans le ciel d'août. 🌠
-* Semaine 30 : Les mûres sauvages mûrissent sur les ronciers pour nourrir les oiseaux. 🍇
-* Semaine 31 : Les papillons de jour profitent des dernières grandes floraisons. 🦋
-* Semaine 32 : Les jeunes rapaces prennent leur autonomie et quittent le nid. 🦅
-* Semaine 33 : Les feuilles des marronniers commencent à prendre une teinte cuivrée. 🍂
-* Semaine 34 : Les rongeurs et écureuils stockent des graines et des noisettes. 🌰
-* Semaine 35 : Les premiers oiseaux insectivores entament leur migration vers le sud. ✈️
-* Semaine 36 : Équinoxe d'automne 22 septembre 2026 — Les nuits redeviennent plus longues que les jours. ⚖️
-* Semaine 37 : Le brame du cerf résonne à travers les massifs forestiers. 🦌
-* Semaine 38 : Poussée des premiers champignons d'automne sous les arbres. 🍄
-* Semaine 39 : Chute des glands et des faînes qui attirent la faune au sol. 🌰
-* Semaine 40 : Les feuilles des arbres virent au jaune, à l'ocre et au rouge. 🍁
-* Semaine 41 : Passage des premiers vols de grues cendrées dans le ciel. 🪿
-* Semaine 42 : Les arbres feuillus se préparent à entrer en repos végétatif. 🌳
-* Semaine 43 : Les matins humides font scintiller les toiles d'araignées couvertes de rosée. 🕸️
-* Semaine 44 : Les étourneaux forment de grands vols collectifs au crépuscule. 🐦
-* Semaine 45 : Les arbres perdent leurs dernières feuilles et laissent deviner le ciel. 🍂
-* Semaine 46 : L'activité des insectes se réduit fortement avec la baisse des températures. ❄️
-* Semaine 47 : Les pluies d'automne lessivent les sols et secouent les branches nues. 🌧️
-* Semaine 48 : Premières gelées blanches matinales sur les prairies. 🧊
-* Semaine 49 : La durée du jour atteint son minimum annuel. 🌑
-* Semaine 50 : Les nids d'écureuils apparaissent clairement dans les arbres dépouillés. 🐿️
-* Semaine 51 : Solstice d'hiver 21 décembre — Nuit la plus longue de l'année. 🌙
-* Semaine 52 : La nature tourne au ralenti en attendant le retour progressif de la chaleur. ❄️
+  Reprend intégralement les correctifs des versions précédentes : plus de
+  plantage en cascade (chaque widget est isolé dans son propre try/catch),
+  mise en page 100% Flexbox (aucun débordement possible), météo en ES5 pur,
+  mode kiosque conservé.
 
-3. **Alerte visuelle sur la liste de courses :**
-- Programme une vérification sur les articles de la liste de courses gérée via le localStorage.
-- Si un article n'a pas été supprimé ou coché comme fait pendant **plus de 24 heures**, fais clignoter l'encart de la liste de courses en rouge pour attirer l'attention.
+  Cherchez "A CONFIGURER" pour les endroits à personnaliser.
+  ============================================================================
+-->
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1024, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>✦ Dashboard ✦</title>
 
-Assure-toi que tout reste parfaitement compatible avec l'environnement ES5 (sans fonctions fléchées, sans fetch, etc.) pour conserver la compatibilité avec l'ancien Safari de l'iPad 4.
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Dashboard">
+
+<!-- Polices pixel : "Silkscreen" pour les titres/boutons/horloge (look
+     arcade), "VT323" pour le texte courant (pixel mais plus lisible en
+     grande taille). Chargées via Google Fonts — nécessite une connexion,
+     comme les autres widgets (météo, radios). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   RESET DE BASE
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+button, .shop-check, .radio-btn, .btn-del, .btn-add, .progress-flower, .btn-pixel {
+  cursor: pointer;
+}
+
+html, body {
+  width: 1024px;
+  height: 768px;
+  overflow: hidden;
+  font-family: 'VT323', "SF Pro Display", Helvetica, Arial, sans-serif;
+  font-size: 19px;
+  color: #F5F5F7;
+  background: linear-gradient(180deg, #141E3C 0%, #190A28 100%);
+  transition: background 3s ease;
+}
+
+/* Titres, horloge et boutons : police pixel/arcade */
+.pixel-font, .widget-title, .clock, .brand-label,
+.radio-btn, .btn-pixel, .forecast-day-label,
+.progress-day-label, .btn-add {
+  font-family: 'Silkscreen', 'VT323', monospace;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   FOND ETOILE
+   ========================================================================== */
+#stars-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 1024px;
+  height: 768px;
+  z-index: 0;
+  pointer-events: none;
+}
+.star {
+  position: absolute;
+  background: #FFFFFF;
+  border-radius: 0;
+  width: 3px !important;
+  height: 3px !important;
+  opacity: 0.2;
+  animation-name: twinkle;
+  animation-timing-function: steps(4);
+  animation-iteration-count: infinite;
+}
+@keyframes twinkle {
+  0%   { opacity: 0.15; }
+  50%  { opacity: 0.9; }
+  100% { opacity: 0.15; }
+}
+
+/* ==========================================================================
+   MISE EN PAGE GENERALE (Flexbox : l'espace restant est toujours absorbé
+   par les widgets "flex", donc rien ne peut jamais déborder de l'écran)
+   ========================================================================== */
+.container {
+  position: relative;
+  z-index: 1;
+  width: 1024px;
+  height: 768px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-columns {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Colonne gauche plus étroite (40%), colonne droite plus large (60%) */
+.col-left {
+  width: 40%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding-right: 7px;
+}
+
+.col-right {
+  width: 60%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding-left: 7px;
+}
+
+/* ==========================================================================
+   STYLE "PIXEL ART" DES ENCARTS
+   ========================================================================== */
+.widget {
+  flex: 0 0 auto;
+  border: 1px solid rgba(255,255,255,0.28);
+  background: rgba(40,25,70,0.30);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.30);
+}
+
+.widget-title {
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #F6C6E0;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+/* WIDGET FUSIONNÉ : libellé + date + heure */
+.widget.brand-clock {
+  text-align: center;
+  padding: 14px 12px 12px;
+}
+.brand-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #A780FF;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.date-fr {
+  font-size: 19px;
+  color: #E4E4E9;
+  letter-spacing: 0.6px;
+  text-transform: capitalize;
+  text-align: center;
+}
+.clock {
+  font-size: 34px;
+  line-height: 44px;
+  letter-spacing: 2px;
+  color: #FFFFFF;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  margin-top: 8px;
+  text-shadow: 3px 3px 0 rgba(184,140,255,0.55);
+}
+
+/* ==========================================================================
+   METEO / PREVISIONS / LUNE / SOLEIL
+   ========================================================================== */
+.weather-block {
+  display: flex;
+  flex-direction: row;
+}
+.weather-left {
+  width: 60%;
+  padding-right: 10px;
+  border-right: 2px dashed rgba(184,140,255,0.35);
+}
+.weather-right {
+  width: 40%;
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.weather-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+.weather-temp { font-size: 50px; font-weight: bold; color: #FFFFFF; }
+.weather-icon { font-size: 40px; margin-left: 10px; }
+.weather-sub {
+  font-size: 17px;
+  color: #C7C7CC;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.forecast-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 2px dashed rgba(184,140,255,0.3);
+}
+.forecast-day {
+  flex: 1;
+  text-align: center;
+}
+.forecast-day-label {
+  font-size: 8px;
+  color: #A780FF;
+  margin-bottom: 4px;
+}
+.forecast-day-icon { font-size: 18px; }
+.forecast-day-temp {
+  font-size: 14px;
+  color: #E4E4E9;
+  margin-top: 2px;
+}
+
+.moon-panel {
+  text-align: center;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 2px dashed rgba(184,140,255,0.3);
+}
+.moon-emoji { font-size: 34px; }
+.moon-label { font-size: 14px; color: #FFD447; margin-top: 6px; }
+.sun-panel { text-align: center; }
+.sun-time {
+  font-size: 17px;
+  color: #FFFFFF;
+  margin: 4px 0;
+}
+
+/* RAPPELS */
+.widget.reminder {
+  border-color: #F6C6E0;
+  background: rgba(70,20,55,0.30);
+  text-align: center;
+  font-size: 17px;
+  padding: 12px;
+  display: none;
+}
+
+/* BARRE DE PROGRESSION 28 JOURS */
+.progress-bar-outer {
+  border: 3px solid #FFFFFF;
+  border-radius: 5px;
+  height: 22px;
+  background: rgba(255,255,255,0.08);
+  margin-top: 6px;
+  position: relative;
+  overflow: hidden;
+}
+.progress-bar-inner {
+  height: 100%;
+  width: 0%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #FFFFFF 0px, #FFFFFF 6px,
+    #F6C6E0 6px, #F6C6E0 12px,
+    #A780FF 12px, #A780FF 18px,
+    #FFD447 18px, #FFD447 20px
+  );
+}
+.progress-day-label { font-size: 10px; color: #FFFFFF; }
+.progress-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.progress-flower {
+  font-size: 26px;
+  line-height: 1;
+  padding: 2px 6px;
+}
+.progress-flower:active { transform: translate(1px,1px); }
+
+/* SHOPPING LIST (widget flexible : absorbe l'espace restant de la colonne) */
+.widget.shopping {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.shopping-input { display: flex; margin-bottom: 8px; flex: 0 0 auto; }
+.shopping-input input {
+  flex: 1;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 0;
+  padding: 9px 12px;
+  color: #fff;
+  font-size: 18px;
+  outline: none;
+  font-family: 'VT323', inherit;
+  min-width: 0;
+}
+.shopping-input input::placeholder { color: #C7C7CC; opacity: 0.55; }
+.shopping-input input:focus { border-color: #F6C6E0; }
+.btn-add {
+  position: relative;
+  background: #FFFFFF;
+  border: 2px solid #A780FF;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  margin-left: 8px;
+  flex: 0 0 auto;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
+}
+.btn-add::before, .btn-add::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #000;
+}
+.btn-add::before { width: 14px; height: 3px; margin: -1px 0 0 -7px; }
+.btn-add::after { width: 3px; height: 14px; margin: -7px 0 0 -1px; }
+.btn-add:active { box-shadow: 1px 1px 0 rgba(0,0,0,0.5); transform: translate(2px,2px); }
+
+.shopping-list {
+  list-style: none;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.shop-item {
+  display: flex;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 2px dashed rgba(255,255,255,0.15);
+  font-size: 18px;
+}
+.shop-check { width: 20px; height: 20px; accent-color: #FFD447; margin-right: 10px; }
+.shop-item.done span { text-decoration: line-through; opacity: 0.35; }
+.shop-item span { flex: 1; }
+.btn-del { background: none; border: none; color: #fff; opacity: 0.4; font-size: 17px; padding: 0 6px; }
+.shopping-status { flex: 0 0 auto; font-size: 14px; color: #9A9AA0; margin-top: 6px; text-align: center; }
+
+/* RADIOS */
+.audio-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.radio-btn {
+  border: 2px solid #FFFFFF;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
+  color: #F5F5F7;
+  font-size: 10px;
+  line-height: 1.5;
+  padding: 10px 10px;
+  margin: 5px;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
+}
+.radio-btn.active { background: #A780FF; color: #1A0F2E; border-color: #FFFFFF; }
+.radio-btn:active { box-shadow: 1px 1px 0 rgba(0,0,0,0.5); transform: translate(2px,2px); }
+.audio-status { font-size: 14px; color: #9A9AA0; margin-top: 10px; text-align: center; }
+
+/* POMODORO */
+.widget.pomodoro { text-align: center; }
+.pomodoro-label {
+  font-family: 'Silkscreen', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #A780FF;
+  margin-bottom: 6px;
+}
+.pomodoro-time {
+  font-family: 'Silkscreen', monospace;
+  font-size: 44px;
+  letter-spacing: 2px;
+  color: #FFFFFF;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 3px 3px 0 rgba(167,128,255,0.4);
+  margin-bottom: 12px;
+}
+.pomodoro-dots {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.pomo-dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #FFFFFF;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.08);
+  margin: 0 4px;
+}
+.pomo-dot.filled { background: #FFD447; border-color: #FFD447; }
+.pomodoro-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-pomo {
+  position: relative;
+  font-family: 'Silkscreen', monospace;
+  font-size: 16px;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(180deg, #FDE3F0 0%, #F6C6E0 55%, #EFAFD4 100%);
+  color: #6B2456;
+  border: 2px solid #FFFFFF;
+  border-radius: 4px;
+  margin: 0 7px;
+  -webkit-clip-path: polygon(
+    6px 0, calc(100% - 6px) 0, 100% 6px,
+    100% calc(100% - 6px), calc(100% - 6px) 100%,
+    6px 100%, 0 calc(100% - 6px), 0 6px
+  );
+  clip-path: polygon(
+    6px 0, calc(100% - 6px) 0, 100% 6px,
+    100% calc(100% - 6px), calc(100% - 6px) 100%,
+    6px 100%, 0 calc(100% - 6px), 0 6px
+  );
+  box-shadow: 0 5px 0 #C983AC, 0 8px 8px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.8);
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+.btn-pomo:active {
+  transform: translateY(5px);
+  box-shadow: 0 0 0 #C983AC, 0 2px 3px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.8);
+}
+.btn-pomo-secondary {
+  width: 38px;
+  height: 38px;
+  font-size: 14px;
+  background: rgba(255,255,255,0.10);
+  color: #FFD447;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.45), 0 6px 6px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.15);
+}
+.btn-pomo-secondary:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 rgba(0,0,0,0.45), 0 2px 3px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.15);
+}
+
+/* MINUTEURS : Pomodoro + minuteur de cuisine côte à côte */
+.timer-pair {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.timer-pair .widget {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-bottom: 0;
+}
+.timer-pair .widget + .widget {
+  margin-left: 10px;
+}
+.kitchen-label {
+  font-family: 'Silkscreen', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #FFD447;
+  margin-bottom: 6px;
+}
+.kitchen-time {
+  font-family: 'Silkscreen', monospace;
+  font-size: 44px;
+  letter-spacing: 2px;
+  color: #FFFFFF;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 3px 3px 0 rgba(255,212,71,0.35);
+  margin-bottom: 12px;
+}
+.kitchen-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-kitchen {
+  position: relative;
+  font-family: 'Silkscreen', monospace;
+  font-size: 14px;
+  width: 42px;
+  height: 42px;
+  background: rgba(255,255,255,0.10);
+  color: #FFD447;
+  border: 2px solid #FFFFFF;
+  border-radius: 4px;
+  margin: 0 5px;
+  -webkit-clip-path: polygon(
+    5px 0, calc(100% - 5px) 0, 100% 5px,
+    100% calc(100% - 5px), calc(100% - 5px) 100%,
+    5px 100%, 0 calc(100% - 5px), 0 5px
+  );
+  clip-path: polygon(
+    5px 0, calc(100% - 5px) 0, 100% 5px,
+    100% calc(100% - 5px), calc(100% - 5px) 100%,
+    5px 100%, 0 calc(100% - 5px), 0 5px
+  );
+  box-shadow: 0 4px 0 rgba(0,0,0,0.45), 0 6px 6px rgba(0,0,0,0.3);
+}
+.btn-kitchen-main {
+  width: 48px;
+  height: 48px;
+  font-size: 16px;
+  background: linear-gradient(180deg, #FFF4B8 0%, #FFD447 55%, #E5B500 100%);
+  color: #4D3A00;
+  box-shadow: 0 5px 0 #B08A00, 0 8px 8px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.8);
+}
+.btn-kitchen:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.45), 0 2px 3px rgba(0,0,0,0.3);
+}
+.btn-kitchen-main:active {
+  transform: translateY(5px);
+  box-shadow: 0 0 0 #B08A00, 0 2px 3px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.8);
+}
+
+/* PHRASE SAISONNIERE */
+.widget.seasonal {
+  text-align: center;
+  padding: 10px 14px;
+}
+.seasonal-week {
+  font-family: 'Silkscreen', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #FFD447;
+  margin-bottom: 6px;
+}
+.seasonal-text {
+  font-size: 17px;
+  line-height: 1.25;
+  color: #FFFFFF;
+}
+
+/* ALERTE LISTE DE COURSES */
+@-webkit-keyframes shoppingAlert {
+  0%, 100% { border-color: rgba(255,255,255,0.28); box-shadow: 0 8px 24px rgba(0,0,0,0.30); }
+  50% { border-color: #FF4B55; box-shadow: 0 0 0 3px rgba(255,75,85,0.55), 0 8px 24px rgba(255,0,0,0.30); }
+}
+@keyframes shoppingAlert {
+  0%, 100% { border-color: rgba(255,255,255,0.28); box-shadow: 0 8px 24px rgba(0,0,0,0.30); }
+  50% { border-color: #FF4B55; box-shadow: 0 0 0 3px rgba(255,75,85,0.55), 0 8px 24px rgba(255,0,0,0.30); }
+}
+.widget.shopping.shopping-alert {
+  -webkit-animation: shoppingAlert 0.8s steps(2, end) infinite;
+  animation: shoppingAlert 0.8s steps(2, end) infinite;
+}
+
+/* JE M'ENNUIE — encart compact (de la place est prévue en dessous) */
+.widget.bored {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 14px 12px;
+}
+.btn-pixel {
+  position: relative;
+  font-size: 13px;
+  background: linear-gradient(180deg, #FDE3F0 0%, #F6C6E0 55%, #EFAFD4 100%);
+  color: #6B2456;
+  border: 3px solid #FFFFFF;
+  border-radius: 4px;
+  padding: 16px 22px;
+  margin-top: 4px;
+  -webkit-clip-path: polygon(
+    9px 0, calc(100% - 9px) 0, 100% 9px,
+    100% calc(100% - 9px), calc(100% - 9px) 100%,
+    9px 100%, 0 calc(100% - 9px), 0 9px
+  );
+  clip-path: polygon(
+    9px 0, calc(100% - 9px) 0, 100% 9px,
+    100% calc(100% - 9px), calc(100% - 9px) 100%,
+    9px 100%, 0 calc(100% - 9px), 0 9px
+  );
+  box-shadow:
+    0 6px 0 #C983AC,
+    0 11px 14px rgba(0,0,0,0.45),
+    inset 0 2px 0 rgba(255,255,255,0.85),
+    inset 0 -3px 0 rgba(201,131,172,0.5);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+.btn-pixel:active {
+  transform: translateY(6px);
+  box-shadow:
+    0 0px 0 #C983AC,
+    0 3px 5px rgba(0,0,0,0.45),
+    inset 0 2px 0 rgba(255,255,255,0.85),
+    inset 0 -3px 0 rgba(201,131,172,0.5);
+}
+.bored-result {
+  display: none;
+  font-size: 20px;
+  margin-top: 4px;
+  line-height: 1.4;
+  padding: 4px 8px;
+  color: #A780FF;
+}
+.bored-reset {
+  display: none;
+  width: 34px;
+  height: 34px;
+  line-height: 28px;
+  background: rgba(0,0,0,0.35);
+  border: 2px solid #FFFFFF;
+  border-radius: 4px;
+  -webkit-clip-path: polygon(
+    5px 0, calc(100% - 5px) 0, 100% 5px,
+    100% calc(100% - 5px), calc(100% - 5px) 100%,
+    5px 100%, 0 calc(100% - 5px), 0 5px
+  );
+  clip-path: polygon(
+    5px 0, calc(100% - 5px) 0, 100% 5px,
+    100% calc(100% - 5px), calc(100% - 5px) 100%,
+    5px 100%, 0 calc(100% - 5px), 0 5px
+  );
+  font-family: 'Silkscreen', 'VT323', monospace;
+  font-size: 16px;
+  color: #FFD447;
+  text-align: center;
+  padding: 0;
+  margin-top: 12px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.5), 0 6px 6px rgba(0,0,0,0.3);
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+.bored-reset:active {
+  transform: translateY(3px);
+  box-shadow: 0 0px 0 rgba(0,0,0,0.5), 0 2px 3px rgba(0,0,0,0.3);
+}
+
+.deco-star { color: #FFD447; opacity: 0.95; font-size: 20px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<div id="stars-bg"></div>
+
+<div class="container">
+
+  <div class="dashboard-columns">
+    <!-- ========================= COLONNE GAUCHE (40%) ========================= -->
+    <div class="col-left">
+
+      <div class="widget brand-clock">
+        <div class="brand-label">✦ Momo's Dashboard ✦</div>
+        <div class="date-fr" id="date-fr">--</div>
+        <div class="clock" id="clock">--:--:--</div>
+      </div>
+
+      <div class="widget weather-block">
+        <div class="weather-left">
+          <div class="widget-title">Météo · Paris</div>
+          <div class="weather-main">
+            <div class="weather-temp" id="weather-temp">--°</div>
+            <div class="weather-icon" id="weather-icon">☁️</div>
+          </div>
+          <div class="weather-sub" id="weather-desc">Chargement…</div>
+          <div class="forecast-row" id="forecast-row"></div>
+        </div>
+        <div class="weather-right">
+          <div class="moon-panel">
+            <div class="widget-title">Lune</div>
+            <div class="moon-emoji" id="moon-emoji">🌑</div>
+            <div class="moon-label" id="moon-label">Calcul…</div>
+          </div>
+          <div class="sun-panel">
+            <div class="widget-title">Soleil</div>
+            <div class="sun-time" id="sun-rise">☀️ --:--</div>
+            <div class="sun-time" id="sun-set">🌙 --:--</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="widget reminder" id="reminder-block"></div>
+
+      <div class="widget progress-widget">
+        <div class="widget-title">Cycle · 28 jours</div>
+        <div class="progress-bar-outer">
+          <div class="progress-bar-inner" id="progress-bar-inner"></div>
+        </div>
+        <div class="progress-info">
+          <span class="progress-day-label" id="progress-day-label">JOUR --/28</span>
+          <span class="progress-flower" id="progress-flower" onclick="resetProgress()" title="Toucher pour réinitialiser">🌸</span>
+        </div>
+      </div>
+
+      <div class="widget shopping">
+        <div class="widget-title"><span class="deco-star">✦</span> Liste de courses <span class="deco-star">✦</span></div>
+        <div class="shopping-input">
+          <input id="shop-input" type="text" placeholder="Ajouter un article…" maxlength="60">
+          <button class="btn-add" onclick="addItem()" aria-label="Ajouter"></button>
+        </div>
+        <ul class="shopping-list" id="shop-list"></ul>
+        <div class="shopping-status" id="shopping-status"></div>
+      </div>
+
+    </div>
+
+    <!-- ========================= COLONNE DROITE (60%) ========================= -->
+    <div class="col-right">
+
+      <div class="widget seasonal" id="seasonal-widget">
+        <div class="seasonal-week" id="seasonal-week">SEMAINE --/52</div>
+        <div class="seasonal-text" id="seasonal-text">Chargement de la nature… 🌿</div>
+      </div>
+
+      <div class="widget audio">
+        <div class="widget-title"><span class="deco-star">✦</span> Radios <span class="deco-star">✦</span></div>
+        <div class="audio-buttons">
+          <button class="radio-btn" id="btn-nova" onclick="playRadio('nova')">Radio Nova</button>
+          <button class="radio-btn" id="btn-tsfjazz" onclick="playRadio('tsfjazz')">TSF Jazz</button>
+          <button class="radio-btn" id="btn-fip" onclick="playRadio('fip')">FIP</button>
+          <button class="radio-btn" id="btn-inter" onclick="playRadio('inter')">France Inter</button>
+          <button class="radio-btn" id="btn-stop" onclick="stopRadio()">■ Stop</button>
+        </div>
+        <audio id="radio-player"></audio>
+        <div class="audio-status" id="audio-status">Aucune radio en cours</div>
+      </div>
+
+      <div class="timer-pair">
+
+        <div class="widget pomodoro">
+          <div class="widget-title"><span class="deco-star">✦</span> Pomodoro <span class="deco-star">✦</span></div>
+          <div class="pomodoro-label" id="pomodoro-label">Travail</div>
+          <div class="pomodoro-time" id="pomodoro-time">25:00</div>
+          <div class="pomodoro-dots" id="pomodoro-dots"></div>
+          <div class="pomodoro-controls">
+            <button class="btn-pomo btn-pomo-secondary" onclick="resetPomodoro()" aria-label="Réinitialiser" title="Réinitialiser">↺</button>
+            <button class="btn-pomo" id="pomodoro-startpause" onclick="togglePomodoro()" aria-label="Démarrer / Pause" title="Démarrer / Pause">▶</button>
+            <button class="btn-pomo btn-pomo-secondary" onclick="skipPomodoro()" aria-label="Passer" title="Passer à la phase suivante">⏭</button>
+          </div>
+        </div>
+
+        <div class="widget kitchen-timer">
+          <div class="widget-title"><span class="deco-star">✦</span> let's get cookin' <span class="deco-star">✦</span></div>
+          <div class="kitchen-label" id="kitchen-label">Minuteur</div>
+          <div class="kitchen-time" id="kitchen-time">10:00</div>
+          <div class="kitchen-controls">
+            <button class="btn-kitchen" onclick="adjustKitchenTimer(-60)" aria-label="Retirer une minute" title="−1 minute">−1</button>
+            <button class="btn-kitchen btn-kitchen-main" id="kitchen-startpause" onclick="toggleKitchenTimer()" aria-label="Démarrer / Pause" title="Démarrer / Pause">▶</button>
+            <button class="btn-kitchen" onclick="adjustKitchenTimer(60)" aria-label="Ajouter une minute" title="+1 minute">+1</button>
+            <button class="btn-kitchen" onclick="resetKitchenTimer()" aria-label="Réinitialiser" title="Réinitialiser">↺</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="widget bored">
+        <div class="widget-title"><span class="deco-star">✦</span> Petit creux d'inspiration <span class="deco-star">✦</span></div>
+        <button class="btn-pixel" id="bored-btn" onclick="showActivity()">JE M'ENNUIE</button>
+        <div class="bored-result" id="bored-result"></div>
+        <button class="bored-reset" id="bored-reset" onclick="resetBored()" aria-label="Réinitialiser" title="Réinitialiser">↺</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================================
+   TOUT LE JAVASCRIPT EST EN ES5 (compatible Safari iOS 10.3.3)
+   Pas de let/const, pas de =>, pas de template strings, pas d'async/await,
+   pas de fetch (XMLHttpRequest uniquement).
+   ============================================================================ */
+
+
+/* ----------------------------------------------------------------------
+   0. UTILITAIRES GÉNÉRAUX
+   ---------------------------------------------------------------------- */
+function pad2(n) {
+  n = Math.floor(n);
+  if (n < 10) { return "0" + n; }
+  return "" + n;
+}
+
+function xhrGetJSON(url, onSuccess, onError) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+  xhr.timeout = 10000;
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        var data;
+        try {
+          data = JSON.parse(xhr.responseText);
+        } catch (parseErr) {
+          if (onError) { onError(parseErr); }
+          return;
+        }
+        try {
+          onSuccess(data);
+        } catch (renderErr) {
+          if (onError) { onError(renderErr); }
+        }
+      } else {
+        if (onError) { onError(new Error("HTTP " + xhr.status)); }
+      }
+    }
+  };
+  xhr.onerror = function () {
+    if (onError) { onError(new Error("network error")); }
+  };
+  xhr.send();
+}
+
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+
+/* ----------------------------------------------------------------------
+   1. CIEL ETOILE (généré une seule fois au chargement)
+   ---------------------------------------------------------------------- */
+function buildStars() {
+  var container = document.getElementById("stars-bg");
+  var starCount = 60;
+  var html = "";
+  var i;
+  for (i = 0; i < starCount; i++) {
+    var top = Math.random() * 768;
+    var left = Math.random() * 1024;
+    var duration = (Math.random() * 3 + 2).toFixed(1);
+    var delay = (Math.random() * 4).toFixed(1);
+    html += '<div class="star" style="' +
+      "top:" + top + "px;" +
+      "left:" + left + "px;" +
+      "animation-duration:" + duration + "s;" +
+      "animation-delay:" + delay + "s;" +
+      '"></div>';
+  }
+  container.innerHTML = html;
+}
+
+
+/* ----------------------------------------------------------------------
+   2. DATE FRANÇAISE + HORLOGE
+   ---------------------------------------------------------------------- */
+var JOURS_FR = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+var JOURS_ABBR = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+var MOIS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+                "août", "septembre", "octobre", "novembre", "décembre"];
+
+function updateClockAndDate() {
+  var now = new Date();
+
+  var dateStr = JOURS_FR[now.getDay()] + " " + now.getDate() + " " +
+                MOIS_FR[now.getMonth()] + " " + now.getFullYear();
+  document.getElementById("date-fr").innerHTML = dateStr;
+
+  var timeStr = pad2(now.getHours()) + ":" + pad2(now.getMinutes()) + ":" + pad2(now.getSeconds());
+  document.getElementById("clock").innerHTML = timeStr;
+
+  return now;
+}
+var SEASONAL_PHRASES = [
+  "Les chauves-souris entrent en léthargie au fond des abris souterrains. 🦇",
+  "Le renard roux commence sa période de reproduction et marque son territoire. 🦊",
+  "Apparition des premiers chatons sur les branches des noisetiers. 🌿",
+  "Les mésanges explorent activement les sols à la recherche de nourriture. 🐦",
+  "Premiers rejets de terre visibles en surface laissés par l'activité des taupes. 🌍",
+  "Sortie des premiers crocus et perce-neige hors de la terre froide. 🌸",
+  "Début de la migration printanière des amphibiens vers les mares de ponte. 🐸",
+  "Le rouge-gorge chante de bon matin pour délimiter son territoire. 🎶",
+  "La sève brute remonte dans les troncs des arbres à feuilles caduques. 🌳",
+  "Les anémones sylvies fleurissent timidement dans les sous-bois. 🌼",
+  "Équinoxe de printemps 20 mars — Durée égale entre le jour et la nuit. ⚖️",
+  "Arrivée des premières hirondelles de cheminée et des pouillets véloces. ✈️",
+  "Les bourgeons des hêtres et des chênes s'ouvrent sur un feuillage neuf. 🌱",
+  "Les lilas en fleurs embaument l'air tiède de la saison. 💜",
+  "Les reines bourdons recherchent un abri pour installer leur colonie. 🐝",
+  "Période active de construction des nids et de ponte chez les oiseaux forestiers. 🪺",
+  "Les prairies sauvages se couvrent d'herbes hautes et denses. 🌾",
+  "Émergence des premières libellules au bord des points d'eau. 🦋",
+  "Les jacinthes sauvages forment un tapis bleu dans les forêts. 🪻",
+  "Naissance des premiers faons de chevreuil cachés dans les herbes. 🦌",
+  "Période de nourrissage intense des oisillons par les parents. 🐦‍⬛",
+  "Apparition des premiers vers luisants dans les hautes herbes le soir. ✨",
+  "Solstice d'été 21 juin 2026 — Journée la plus longue de l'année. ☀️",
+  "Apparition et maturité des premières fraises des bois. 🍓",
+  "Les cigales débutent leur chant caractéristique en zone chaude. 🎶",
+  "Éclosion des œufs de mantes religieuses dans les herbes. 🦗",
+  "La terre sèche sous le soleil estival et la végétation ralentit. 🏜️",
+  "Pic de chaleur de l'été, la faune cherche l'ombre aux heures chaudes. 🥵",
+  "Passage de la pluie d'étoiles filantes des Perséides dans le ciel d'août. 🌠",
+  "Les mûres sauvages mûrissent sur les ronciers pour nourrir les oiseaux. 🍇",
+  "Les papillons de jour profitent des dernières grandes floraisons. 🦋",
+  "Les jeunes rapaces prennent leur autonomie et quittent le nid. 🦅",
+  "Les feuilles des marronniers commencent à prendre une teinte cuivrée. 🍂",
+  "Les rongeurs et écureuils stockent des graines et des noisettes. 🌰",
+  "Les premiers oiseaux insectivores entament leur migration vers le sud. ✈️",
+  "Équinoxe d'automne 22 septembre 2026 — Les nuits redeviennent plus longues que les jours. ⚖️",
+  "Le brame du cerf résonne à travers les massifs forestiers. 🦌",
+  "Poussée des premiers champignons d'automne sous les arbres. 🍄",
+  "Chute des glands et des faînes qui attirent la faune au sol. 🌰",
+  "Les feuilles des arbres virent au jaune, à l'ocre et au rouge. 🍁",
+  "Passage des premiers vols de grues cendrées dans le ciel. 🪿",
+  "Les arbres feuillus se préparent à entrer en repos végétatif. 🌳",
+  "Les matins humides font scintiller les toiles d'araignées couvertes de rosée. 🕸️",
+  "Les étourneaux forment de grands vols collectifs au crépuscule. 🐦",
+  "Les arbres perdent leurs dernières feuilles et laissent deviner le ciel. 🍂",
+  "L'activité des insectes se réduit fortement avec la baisse des températures. ❄️",
+  "Les pluies d'automne lessivent les sols et secouent les branches nues. 🌧️",
+  "Premières gelées blanches matinales sur les prairies. 🧊",
+  "La durée du jour atteint son minimum annuel. 🌑",
+  "Les nids d'écureuils apparaissent clairement dans les arbres dépouillés. 🐿️",
+  "Solstice d'hiver 21 décembre — Nuit la plus longue de l'année. 🌙",
+  "La nature tourne au ralenti en attendant le retour progressif de la chaleur. ❄️"
+];
+
+function getSeasonalWeek(now) {
+  var start = new Date(now.getFullYear(), 0, 1);
+  var startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+  var currentDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var diffDays = Math.floor((currentDay.getTime() - startDay.getTime()) / 86400000);
+  var week = Math.floor(diffDays / 7) + 1;
+
+  /* La liste utilisateur contient exactement 52 semaines. */
+  if (week < 1) { week = 1; }
+  if (week > 52) { week = 52; }
+  return week;
+}
+
+function updateSeasonalPhrase(now) {
+  var week = getSeasonalWeek(now);
+  var weekEl = document.getElementById("seasonal-week");
+  var textEl = document.getElementById("seasonal-text");
+
+  if (weekEl) { weekEl.innerHTML = "SEMAINE " + week + "/52"; }
+  if (textEl) { textEl.innerHTML = escapeHtml(SEASONAL_PHRASES[week - 1]); }
+}
+
+
+
+
+/* ----------------------------------------------------------------------
+   2bis. FOND DYNAMIQUE CONTINU
+   ---------------------------------------------------------------------- */
+var NIGHT_TOP = [20, 30, 60];      // #141E3C — bleu nuit profond
+var NIGHT_BOTTOM = [25, 10, 40];   // #190A28 — violet très sombre
+var DAY_TOP = [180, 225, 250];     // #B4E1FA — bleu pastel lumineux
+var DAY_BOTTOM = [155, 120, 210];  // #9B78D2 — violet doux
+
+function daylightFactor(now) {
+  var hour = now.getHours() + now.getMinutes() / 60;
+  if (hour <= 6 || hour >= 18) { return 0; }
+  var t = (hour - 6) / 12; // 0 à 6h, 1 à 18h
+  return Math.sin(Math.PI * t); // pic à midi (t = 0.5)
+}
+
+function lerpChannel(a, b, t) {
+  return Math.round(a + (b - a) * t);
+}
+
+function updateBackground() {
+  var now = new Date();
+  var f = daylightFactor(now);
+  var top = [
+    lerpChannel(NIGHT_TOP[0], DAY_TOP[0], f),
+    lerpChannel(NIGHT_TOP[1], DAY_TOP[1], f),
+    lerpChannel(NIGHT_TOP[2], DAY_TOP[2], f)
+  ];
+  var bottom = [
+    lerpChannel(NIGHT_BOTTOM[0], DAY_BOTTOM[0], f),
+    lerpChannel(NIGHT_BOTTOM[1], DAY_BOTTOM[1], f),
+    lerpChannel(NIGHT_BOTTOM[2], DAY_BOTTOM[2], f)
+  ];
+  document.body.style.background =
+    "linear-gradient(180deg, rgb(" + top.join(",") + ") 0%, rgb(" + bottom.join(",") + ") 100%)";
+}
+
+
+/* ----------------------------------------------------------------------
+   3. RAPPELS CONDITIONNELS
+   ---------------------------------------------------------------------- */
+function checkReminder(now) {
+  var day = now.getDay();
+  var hour = now.getHours();
+  var block = document.getElementById("reminder-block");
+  var message = null;
+
+  if (day === 1 && hour >= 6 && hour < 12) {
+    message = "✦ Prends ta B12 ✦";
+  } else if (day === 5 && hour >= 6 && hour < 12) {
+    message = "✦ Arrose les plantes ✦";
+  }
+
+  if (message) {
+    block.innerHTML = message;
+    block.style.display = "block";
+  } else {
+    block.style.display = "none";
+  }
+}
+
+
+/* ----------------------------------------------------------------------
+   4. LISTE DE COURSES LOCALE (localStorage — fonctionne hors-ligne)
+   ---------------------------------------------------------------------- */
+var SHOPPING_STORAGE_KEY = "dashboard-shopping-list";
+var SHOPPING_ALERT_MS = 24 * 60 * 60 * 1000;
+
+function loadShoppingItems() {
+  var raw = null;
+  try { raw = localStorage.getItem(SHOPPING_STORAGE_KEY); } catch (e) {}
+  if (!raw) { return []; }
+  try {
+    var data = JSON.parse(raw);
+    return (data && data.length) ? data : [];
+  } catch (e2) {
+    return [];
+  }
+}
+
+function saveShoppingItems(items) {
+  try { localStorage.setItem(SHOPPING_STORAGE_KEY, JSON.stringify(items)); } catch (e) {}
+}
+
+function hasOldShoppingItem(items, nowMs) {
+  var i;
+  for (i = 0; i < items.length; i++) {
+    if (!items[i].done && items[i].createdAt && (nowMs - items[i].createdAt > SHOPPING_ALERT_MS)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function updateShoppingAlert(items) {
+  var widget = document.querySelector(".widget.shopping");
+  if (!widget) { return; }
+  if (hasOldShoppingItem(items, new Date().getTime())) {
+    widget.className = "widget shopping shopping-alert";
+  } else {
+    widget.className = "widget shopping";
+  }
+}
+
+function renderShoppingList() {
+  var listEl = document.getElementById("shop-list");
+  var statusEl = document.getElementById("shopping-status");
+  var items = loadShoppingItems();
+  var html = "";
+  var i;
+  var changed = false;
+
+  /* Migration douce : les anciens articles reçoivent une date de création
+     au premier affichage, sans casser le localStorage existant. */
+  for (i = 0; i < items.length; i++) {
+    if (!items[i].createdAt) {
+      items[i].createdAt = new Date().getTime();
+      changed = true;
+    }
+  }
+  if (changed) { saveShoppingItems(items); }
+
+  if (!items.length) {
+    listEl.innerHTML = '<li class="shopping-status">Aucun article</li>';
+  } else {
+    for (i = 0; i < items.length; i++) {
+      var item = items[i];
+      var doneClass = item.done ? " done" : "";
+      html += '<li class="shop-item' + doneClass + '">' +
+        '<input class="shop-check" type="checkbox" ' +
+        (item.done ? 'checked="checked" ' : '') +
+        'onclick="toggleItem(' + i + ')">' +
+        '<span>' + escapeHtml(item.text) + '</span>' +
+        '<button class="btn-del" onclick="deleteItem(' + i + ')">✕</button>' +
+        '</li>';
+    }
+    listEl.innerHTML = html;
+  }
+
+  statusEl.innerHTML = items.length + (items.length > 1 ? " articles" : " article");
+  updateShoppingAlert(items);
+}
+
+function addItem() {
+  var input = document.getElementById("shop-input");
+  var text = input.value.replace(/^\s+|\s+$/g, "");
+  if (!text) { input.focus(); return; }
+
+  var items = loadShoppingItems();
+  items.push({
+    text: text,
+    done: false,
+    createdAt: new Date().getTime()
+  });
+  saveShoppingItems(items);
+  input.value = "";
+  renderShoppingList();
+  input.focus();
+}
+
+function toggleItem(index) {
+  var items = loadShoppingItems();
+  if (!items[index]) { return; }
+
+  items[index].done = !items[index].done;
+
+  /* Si l'article est rouvert, son délai de 24 h repart à zéro. */
+  if (!items[index].done) {
+    items[index].createdAt = new Date().getTime();
+  }
+
+  saveShoppingItems(items);
+  renderShoppingList();
+}
+
+function deleteItem(index) {
+  var items = loadShoppingItems();
+  if (!items[index]) { return; }
+  items.splice(index, 1);
+  saveShoppingItems(items);
+  renderShoppingList();
+}
+
+function initShoppingList() {
+  renderShoppingList();
+
+  /* Vérification régulière de l'ancienneté sans recharger la page. */
+  setInterval(function () {
+    updateShoppingAlert(loadShoppingItems());
+  }, 60000);
+
+  var input = document.getElementById("shop-input");
+  input.onkeypress = function (event) {
+    event = event || window.event;
+    if (event.keyCode === 13) {
+      addItem();
+      return false;
+    }
+  };
+}
+
+
+/* ----------------------------------------------------------------------
+   5. METEO, PREVISIONS 4 JOURS, LUNE & SOLEIL (Open-Meteo, sans clé API)
+   ---------------------------------------------------------------------- */
+
+// A CONFIGURER si besoin : coordonnées par défaut = Paris.
+var WEATHER_LAT = 48.8566;
+var WEATHER_LON = 2.3522;
+
+function decodeWeatherCode(code) {
+  var table = {
+    0: { icon: "☀️", label: "Ciel dégagé" },
+    1: { icon: "🌤️", label: "Plutôt dégagé" },
+    2: { icon: "⛅", label: "Partiellement nuageux" },
+    3: { icon: "☁️", label: "Couvert" },
+    45: { icon: "🌫️", label: "Brouillard" },
+    48: { icon: "🌫️", label: "Brouillard givrant" },
+    51: { icon: "🌦️", label: "Bruine légère" },
+    53: { icon: "🌦️", label: "Bruine" },
+    55: { icon: "🌦️", label: "Bruine forte" },
+    61: { icon: "🌧️", label: "Pluie légère" },
+    63: { icon: "🌧️", label: "Pluie" },
+    65: { icon: "🌧️", label: "Pluie forte" },
+    71: { icon: "🌨️", label: "Neige légère" },
+    73: { icon: "🌨️", label: "Neige" },
+    75: { icon: "❄️", label: "Neige forte" },
+    80: { icon: "🌦️", label: "Averses" },
+    81: { icon: "🌦️", label: "Averses fortes" },
+    95: { icon: "⛈️", label: "Orage" },
+    96: { icon: "⛈️", label: "Orage + grêle" },
+    99: { icon: "⛈️", label: "Orage violent" }
+  };
+  if (table[code]) { return table[code]; }
+  return { icon: "❓", label: "Inconnu" };
+}
+
+function renderForecast(daily) {
+  var container = document.getElementById("forecast-row");
+  if (!daily || !daily.time) { return; }
+  var count = Math.min(4, daily.time.length - 1);
+  var html = "";
+  var i;
+  for (i = 1; i <= count; i++) {
+    var d = new Date(daily.time[i] + "T00:00:00");
+    var info = decodeWeatherCode(daily.weathercode[i]);
+    var tmax = Math.round(daily.temperature_2m_max[i]);
+    var tmin = Math.round(daily.temperature_2m_min[i]);
+    html += '<div class="forecast-day">' +
+      '<div class="forecast-day-label">' + JOURS_ABBR[d.getDay()] + '</div>' +
+      '<div class="forecast-day-icon">' + info.icon + '</div>' +
+      '<div class="forecast-day-temp">' + tmax + '°/' + tmin + '°</div>' +
+      '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function refreshWeather() {
+  var url = "https://api.open-meteo.com/v1/forecast?latitude=" + WEATHER_LAT +
+    "&longitude=" + WEATHER_LON +
+    "&current_weather=true" +
+    "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset" +
+    "&timezone=Europe%2FParis";
+
+  xhrGetJSON(
+    url,
+    function (data) {
+      if (data.current_weather) {
+        var temp = Math.round(data.current_weather.temperature);
+        var code = data.current_weather.weathercode;
+        var info = decodeWeatherCode(code);
+        document.getElementById("weather-temp").innerHTML = temp + "°";
+        document.getElementById("weather-icon").innerHTML = info.icon;
+        document.getElementById("weather-desc").innerHTML = info.label;
+      }
+      if (data.daily) {
+        if (data.daily.sunrise && data.daily.sunrise[0]) {
+          var sunrise = data.daily.sunrise[0].substr(11, 5);
+          var sunset = data.daily.sunset[0].substr(11, 5);
+          // Libellés texte "Lever"/"Coucher" volontairement absents :
+          // seules les icônes ☀️ / 🌙 accompagnent les horaires.
+          document.getElementById("sun-rise").innerHTML = "☀️ " + sunrise;
+          document.getElementById("sun-set").innerHTML = "🌙 " + sunset;
+        }
+        renderForecast(data.daily);
+      }
+    },
+    function () {
+      document.getElementById("weather-desc").innerHTML = "Météo indisponible";
+    }
+  );
+}
+
+function getMoonPhase(date) {
+  var synodicMonth = 29.530588853;
+  var knownNewMoon = Date.UTC(2000, 0, 6, 18, 14, 0);
+  var diffDays = (date.getTime() - knownNewMoon) / 86400000;
+  var phase = diffDays % synodicMonth;
+  if (phase < 0) { phase += synodicMonth; }
+  var fraction = phase / synodicMonth;
+
+  var emojis = ["🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘"];
+  var labels = ["Nouvelle lune", "Premier croissant", "Premier quartier",
+                "Gibbeuse croissante", "Pleine lune", "Gibbeuse décroissante",
+                "Dernier quartier", "Dernier croissant"];
+
+  var index = Math.floor(fraction * 8 + 0.5) % 8;
+  return { emoji: emojis[index], label: labels[index] };
+}
+
+function refreshMoon() {
+  var moon = getMoonPhase(new Date());
+  document.getElementById("moon-emoji").innerHTML = moon.emoji;
+  document.getElementById("moon-label").innerHTML = moon.label;
+}
+
+
+/* ----------------------------------------------------------------------
+   6. BARRE DE PROGRESSION SUR 28 JOURS
+   ----------------------------------------------------------------------
+   Le point de départ du cycle est mémorisé dans localStorage. Toucher la
+   fleur remet ce point de départ à "aujourd'hui", ce qui remet la barre
+   à zéro.
+   ---------------------------------------------------------------------- */
+var PROGRESS_STORAGE_KEY = "dashboard-cycle-start";
+
+function todayDateStr() {
+  var now = new Date();
+  return now.getFullYear() + "-" + pad2(now.getMonth() + 1) + "-" + pad2(now.getDate());
+}
+
+function parseDateStr(s) {
+  var parts = s.split("-");
+  return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+}
+
+function getProgressStart() {
+  var raw = null;
+  try { raw = localStorage.getItem(PROGRESS_STORAGE_KEY); } catch (e) {}
+  if (!raw) {
+    raw = todayDateStr();
+    try { localStorage.setItem(PROGRESS_STORAGE_KEY, raw); } catch (e2) {}
+  }
+  return raw;
+}
+
+function updateProgressBar() {
+  var startStr = getProgressStart();
+  var start = parseDateStr(startStr);
+  var now = new Date();
+  var todayOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  var diffDays = Math.floor((todayOnly.getTime() - start.getTime()) / 86400000);
+  if (diffDays < 0) { diffDays = 0; }
+  var dayInCycle = (diffDays % 28) + 1;
+  var pct = Math.round((dayInCycle / 28) * 100);
+
+  document.getElementById("progress-bar-inner").style.width = pct + "%";
+  document.getElementById("progress-day-label").innerHTML = "JOUR " + dayInCycle + "/28";
+}
+
+function resetProgress() {
+  try { localStorage.setItem(PROGRESS_STORAGE_KEY, todayDateStr()); } catch (e) {}
+  updateProgressBar();
+}
+
+
+/* ----------------------------------------------------------------------
+   7. "JE M'ENNUIE" — TIRAGE D'UNE ACTIVITE AU HASARD
+   ---------------------------------------------------------------------- */
+var BORED_ACTIVITIES = [
+  "Ranger un endroit que je n'ai pas rangé depuis longtemps",
+  "Lire une BD",
+  "Lire 10 pages de ton livre",
+  "Faire du tri dans ses photos de téléphone",
+  "Plier le linge ou ranger mon armoire",
+  "Aller sur un article au hasard sur Wikipédia",
+  "Créer une double page de \"Junk Journal\"",
+  "Réparer ou upcycler un vêtement",
+  "Prendre un bain",
+  "Aller marcher",
+  "Faire une séance de yoga",
+  "Faire des pompes"
+];
+
+function showActivity() {
+  var idx = Math.floor(Math.random() * BORED_ACTIVITIES.length);
+  document.getElementById("bored-result").innerHTML = escapeHtml(BORED_ACTIVITIES[idx]);
+  document.getElementById("bored-result").style.display = "block";
+  document.getElementById("bored-btn").style.display = "none";
+  document.getElementById("bored-reset").style.display = "inline-block";
+}
+
+function resetBored() {
+  document.getElementById("bored-result").innerHTML = "";
+  document.getElementById("bored-result").style.display = "none";
+  document.getElementById("bored-btn").style.display = "inline-block";
+  document.getElementById("bored-reset").style.display = "none";
+}
+
+
+/* ----------------------------------------------------------------------
+   7bis. POMODORO — minuteur travail/pause avec sonnerie
+   ----------------------------------------------------------------------
+   25 min de travail / 5 min de pause courte, avec une pause longue de
+   15 min toutes les 4 sessions de travail. La sonnerie est générée en
+   direct via Web Audio (aucun fichier audio à charger). Le contexte
+   audio est créé/relancé au premier clic sur "Démarrer" (geste
+   utilisateur requis par iOS) puis réutilisé pour la sonnerie de fin.
+   ---------------------------------------------------------------------- */
+var POMODORO_WORK_MIN = 25;
+var POMODORO_BREAK_MIN = 5;
+var POMODORO_LONG_BREAK_MIN = 15;
+
+var pomodoroState = {
+  mode: "work",
+  remaining: POMODORO_WORK_MIN * 60,
+  running: false,
+  intervalId: null,
+  cyclesCompleted: 0
+};
+
+var pomodoroAudioCtx = null;
+
+function formatPomodoroTime(totalSeconds) {
+  var m = Math.floor(totalSeconds / 60);
+  var s = totalSeconds % 60;
+  return pad2(m) + ":" + pad2(s);
+}
+
+function renderPomodoroDots() {
+  var container = document.getElementById("pomodoro-dots");
+  if (!container) { return; }
+  var completedInCycle = pomodoroState.cyclesCompleted % 4;
+  var html = "";
+  var i;
+  for (i = 0; i < 4; i++) {
+    html += '<span class="pomo-dot' + (i < completedInCycle ? " filled" : "") + '"></span>';
+  }
+  container.innerHTML = html;
+}
+
+function updatePomodoroDisplay() {
+  var timeEl = document.getElementById("pomodoro-time");
+  var labelEl = document.getElementById("pomodoro-label");
+  if (timeEl) { timeEl.innerHTML = formatPomodoroTime(pomodoroState.remaining); }
+  if (labelEl) {
+    var label = "Travail";
+    if (pomodoroState.mode === "break") { label = "Pause"; }
+    else if (pomodoroState.mode === "longbreak") { label = "Pause longue"; }
+    labelEl.innerHTML = label;
+  }
+  renderPomodoroDots();
+}
+
+function advancePomodoroMode() {
+  if (pomodoroState.mode === "work") {
+    pomodoroState.cyclesCompleted++;
+    if (pomodoroState.cyclesCompleted % 4 === 0) {
+      pomodoroState.mode = "longbreak";
+      pomodoroState.remaining = POMODORO_LONG_BREAK_MIN * 60;
+    } else {
+      pomodoroState.mode = "break";
+      pomodoroState.remaining = POMODORO_BREAK_MIN * 60;
+    }
+  } else {
+    pomodoroState.mode = "work";
+    pomodoroState.remaining = POMODORO_WORK_MIN * 60;
+  }
+}
+
+function ensurePomodoroAudio() {
+  if (!pomodoroAudioCtx) {
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    if (Ctx) {
+      try { pomodoroAudioCtx = new Ctx(); } catch (e) {}
+    }
+  }
+  if (pomodoroAudioCtx && pomodoroAudioCtx.state === "suspended" && pomodoroAudioCtx.resume) {
+    try { pomodoroAudioCtx.resume(); } catch (e2) {}
+  }
+}
+
+function playPomodoroBeep(ctx, delaySeconds, frequency) {
+  try {
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = frequency;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    var startTime = ctx.currentTime + delaySeconds;
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.exponentialRampToValueAtTime(0.35, startTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.35);
+    osc.start(startTime);
+    osc.stop(startTime + 0.4);
+  } catch (e) {}
+}
+
+function pomodoroAlarm() {
+  ensurePomodoroAudio();
+  if (!pomodoroAudioCtx) { return; }
+  playPomodoroBeep(pomodoroAudioCtx, 0, 880);
+  playPomodoroBeep(pomodoroAudioCtx, 0.45, 880);
+  playPomodoroBeep(pomodoroAudioCtx, 0.9, 1175);
+}
+
+function pomodoroTick() {
+  pomodoroState.remaining--;
+  if (pomodoroState.remaining <= 0) {
+    pomodoroAlarm();
+    advancePomodoroMode();
+  }
+  updatePomodoroDisplay();
+}
+
+function startPomodoro() {
+  if (pomodoroState.running) { return; }
+  ensurePomodoroAudio();
+  pomodoroState.running = true;
+  var btn = document.getElementById("pomodoro-startpause");
+  if (btn) { btn.innerHTML = "❚❚"; }
+  pomodoroState.intervalId = setInterval(pomodoroTick, 1000);
+}
+
+function pausePomodoro() {
+  pomodoroState.running = false;
+  var btn = document.getElementById("pomodoro-startpause");
+  if (btn) { btn.innerHTML = "▶"; }
+  if (pomodoroState.intervalId) {
+    clearInterval(pomodoroState.intervalId);
+    pomodoroState.intervalId = null;
+  }
+}
+
+function togglePomodoro() {
+  if (pomodoroState.running) { pausePomodoro(); } else { startPomodoro(); }
+}
+
+function skipPomodoro() {
+  var wasRunning = pomodoroState.running;
+  pausePomodoro();
+  advancePomodoroMode();
+  updatePomodoroDisplay();
+  if (wasRunning) { startPomodoro(); }
+}
+
+function resetPomodoro() {
+  pausePomodoro();
+  pomodoroState.mode = "work";
+  pomodoroState.remaining = POMODORO_WORK_MIN * 60;
+  pomodoroState.cyclesCompleted = 0;
+  updatePomodoroDisplay();
+}
+
+
+/* ----------------------------------------------------------------------
+   8. MINUTEUR DE CUISINE — "let's get cookin'"
+   ---------------------------------------------------------------------- */
+var KITCHEN_DEFAULT_MIN = 10;
+
+var kitchenState = {
+  remaining: KITCHEN_DEFAULT_MIN * 60,
+  running: false,
+  intervalId: null
+};
+
+function formatKitchenTime(totalSeconds) {
+  var m = Math.floor(totalSeconds / 60);
+  var s = totalSeconds % 60;
+  return pad2(m) + ":" + pad2(s);
+}
+
+function updateKitchenDisplay() {
+  var timeEl = document.getElementById("kitchen-time");
+  var btn = document.getElementById("kitchen-startpause");
+  if (timeEl) { timeEl.innerHTML = formatKitchenTime(kitchenState.remaining); }
+  if (btn) { btn.innerHTML = kitchenState.running ? "❚❚" : "▶"; }
+}
+
+function kitchenAlarm() {
+  ensurePomodoroAudio();
+  if (!pomodoroAudioCtx) { return; }
+  playPomodoroBeep(pomodoroAudioCtx, 0, 784);
+  playPomodoroBeep(pomodoroAudioCtx, 0.45, 988);
+  playPomodoroBeep(pomodoroAudioCtx, 0.9, 1319);
+  playPomodoroBeep(pomodoroAudioCtx, 1.35, 988);
+}
+
+function kitchenTick() {
+  if (kitchenState.remaining > 0) {
+    kitchenState.remaining--;
+  }
+
+  if (kitchenState.remaining <= 0) {
+    kitchenState.remaining = 0;
+    kitchenState.running = false;
+    if (kitchenState.intervalId) {
+      clearInterval(kitchenState.intervalId);
+      kitchenState.intervalId = null;
+    }
+    kitchenAlarm();
+  }
+
+  updateKitchenDisplay();
+}
+
+function startKitchenTimer() {
+  if (kitchenState.running || kitchenState.remaining <= 0) { return; }
+  ensurePomodoroAudio();
+  kitchenState.running = true;
+  updateKitchenDisplay();
+  kitchenState.intervalId = setInterval(kitchenTick, 1000);
+}
+
+function pauseKitchenTimer() {
+  kitchenState.running = false;
+  if (kitchenState.intervalId) {
+    clearInterval(kitchenState.intervalId);
+    kitchenState.intervalId = null;
+  }
+  updateKitchenDisplay();
+}
+
+function toggleKitchenTimer() {
+  if (kitchenState.running) {
+    pauseKitchenTimer();
+  } else {
+    startKitchenTimer();
+  }
+}
+
+function adjustKitchenTimer(seconds) {
+  var wasRunning = kitchenState.running;
+  pauseKitchenTimer();
+
+  kitchenState.remaining += seconds;
+  if (kitchenState.remaining < 0) { kitchenState.remaining = 0; }
+  if (kitchenState.remaining > 99 * 60 + 59) {
+    kitchenState.remaining = 99 * 60 + 59;
+  }
+
+  updateKitchenDisplay();
+  if (wasRunning && kitchenState.remaining > 0) {
+    startKitchenTimer();
+  }
+}
+
+function resetKitchenTimer() {
+  pauseKitchenTimer();
+  kitchenState.remaining = KITCHEN_DEFAULT_MIN * 60;
+  updateKitchenDisplay();
+}
+
+
+/* ----------------------------------------------------------------------
+   8. AUDIO / RADIOS EN DIRECT
+   ---------------------------------------------------------------------- */
+var RADIO_LABELS = {
+  nova: "Radio Nova",
+  tsfjazz: "TSF Jazz",
+  fip: "Fip",
+  inter: "France Inter"
+};
+
+var RADIO_STREAMS = {
+  nova: "https://novazz.ice.infomaniak.ch/novazz-128.mp3",
+  tsfjazz: "https://tsfjazz.ice.infomaniak.ch/tsfjazz-high.mp3",
+  fip: "https://icecast.radiofrance.fr/fip-midfi.mp3",
+  inter: "https://icecast.radiofrance.fr/franceinter-midfi.mp3"
+};
+
+function clearActiveButtons() {
+  var ids = ["btn-nova", "btn-tsfjazz", "btn-fip", "btn-inter"];
+  var i;
+  for (i = 0; i < ids.length; i++) {
+    document.getElementById(ids[i]).className = "radio-btn";
+  }
+}
+
+function startPlayback(key) {
+  var player = document.getElementById("radio-player");
+  var statusEl = document.getElementById("audio-status");
+  var url = RADIO_STREAMS[key];
+
+  clearActiveButtons();
+
+  player.onerror = function () {
+    statusEl.innerHTML = "Erreur de lecture pour " + RADIO_LABELS[key];
+    clearActiveButtons();
+  };
+
+  player.src = url;
+
+  var result = player.play();
+  if (result && typeof result.catch === "function") {
+    result.catch(function () {
+      statusEl.innerHTML = "Lecture bloquée — touchez à nouveau " + RADIO_LABELS[key];
+      clearActiveButtons();
+    });
+  }
+
+  var btn = document.getElementById("btn-" + key);
+  if (btn) { btn.className = "radio-btn active"; }
+
+  statusEl.innerHTML = "En cours : " + RADIO_LABELS[key];
+}
+
+function playRadio(key) {
+  if (!RADIO_STREAMS[key]) { return; }
+  startPlayback(key);
+}
+
+function stopRadio() {
+  var player = document.getElementById("radio-player");
+  player.pause();
+  player.removeAttribute("src");
+  player.load();
+  player.onerror = null;
+  clearActiveButtons();
+  document.getElementById("audio-status").innerHTML = "Aucune radio en cours";
+}
+
+
+/* ----------------------------------------------------------------------
+   9. INITIALISATION GENERALE
+   ----------------------------------------------------------------------
+   Chaque étape est isolée dans son propre try/catch : si un widget
+   rencontre un problème, il ne bloque jamais l'initialisation des
+   autres.
+   ---------------------------------------------------------------------- */
+function safeRun(fn, label) {
+  try {
+    fn();
+  } catch (e) {
+    if (window.console && console.error) {
+      console.error("Erreur dans " + label + " :", e);
+    }
+  }
+}
+
+function initDashboard() {
+  safeRun(buildStars, "buildStars");
+
+  safeRun(function () {
+    var now = updateClockAndDate();
+    checkReminder(now);
+    updateSeasonalPhrase(now);
+    setInterval(function () {
+      var n = updateClockAndDate();
+      checkReminder(n);
+      updateSeasonalPhrase(n);
+    }, 1000);
+  }, "horloge + phrase saisonnière");
+
+  safeRun(function () {
+    updateBackground();
+    setInterval(updateBackground, 60000);
+  }, "fond dynamique");
+
+  safeRun(function () {
+    initShoppingList();
+  }, "liste de courses");
+
+  safeRun(function () {
+    refreshWeather();
+    setInterval(refreshWeather, 15 * 60 * 1000);
+  }, "météo");
+
+  safeRun(function () {
+    refreshMoon();
+    setInterval(refreshMoon, 60 * 60 * 1000);
+  }, "lune");
+
+  safeRun(function () {
+    updateProgressBar();
+    setInterval(updateProgressBar, 60 * 60 * 1000);
+  }, "barre de progression");
+
+  safeRun(function () {
+    updatePomodoroDisplay();
+    updateKitchenDisplay();
+  }, "minuteurs");
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  initDashboard();
+});
+</script>
+
+<script>
+  (function () {
+    if (("standalone" in window.navigator) && window.navigator.standalone) {
+      var noddy, remotes = false;
+      document.addEventListener('click', function (event) {
+        noddy = event.target;
+        while (noddy.nodeName !== "A" && noddy.nodeName !== "HTML") {
+          noddy = noddy.parentNode;
+        }
+        if ('href' in noddy && noddy.href.indexOf('http') !== -1 && (noddy.href.indexOf(document.location.host) !== -1 || remotes)) {
+          event.preventDefault();
+          document.location.href = noddy.href;
+        }
+      }, false);
+    }
+  })();
+</script>
+
+</body>
+</html>
