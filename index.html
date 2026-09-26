@@ -3,9 +3,9 @@
   ============================================================================
   DASHBOARD PERSONNEL POUR IPAD 4 (iOS 10.3.3 / Safari mobile ancien)
   ============================================================================
-  Fichier 100% autonome : un seul index.html, prêt pour GitHub Pages.
+  Fichier autonome : un seul index.html, sans police externe ni asset graphique externe.
 
-  CE QUI CHANGE DANS CETTE VERSION (v4 — "pixel art rétro") :
+  CE QUI CHANGE DANS CETTE VERSION (v5 — "NEON CRT autonome") :
   1) Habillage visuel façon pixel art / arcade rétro : police pixel
      (Silkscreen pour les titres/boutons/horloge, VT323 pour le
      texte courant, plus lisible en grande taille), bordures nettes
@@ -38,7 +38,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1024, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>✦ Dashboard ✦</title>
+<title>◆ Dashboard ◆</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -48,9 +48,6 @@
      arcade), "VT323" pour le texte courant (pixel mais plus lisible en
      grande taille). Chargées via Google Fonts — nécessite une connexion,
      comme les autres widgets (météo, radios). -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
-
 <style>
 /* ==========================================================================
    RESET DE BASE
@@ -76,10 +73,10 @@ html, body {
   width: 1024px;
   height: 768px;
   overflow: hidden;
-  font-family: 'VT323', "SF Pro Display", Helvetica, Arial, sans-serif;
+  font-family: "Courier New", Courier, monospace;
   font-size: 19px;
-  color: #F5F5F7;
-  background: linear-gradient(180deg, #141E3C 0%, #190A28 100%);
+  color: #E9FFF7;
+  background: linear-gradient(180deg, #07111F 0%, #0B1726 100%);
   transition: background 3s ease;
 }
 
@@ -87,7 +84,7 @@ html, body {
 .pixel-font, .widget-title, .clock, .brand-label,
 .radio-btn, .btn-pixel, .forecast-day-label,
 .progress-day-label, .btn-add {
-  font-family: 'Silkscreen', 'VT323', monospace;
+  font-family: "Courier New", Courier, monospace;
   font-weight: 700;
 }
 
@@ -104,7 +101,7 @@ html, body {
 }
 .star {
   position: absolute;
-  background: #FFFFFF;
+  background: #E9FFF7;
   border-radius: 0;
   width: 3px !important;
   height: 3px !important;
@@ -162,11 +159,11 @@ html, body {
    ========================================================================== */
 .widget {
   flex: 0 0 auto;
-  border: 1px solid rgba(255,255,255,0.28);
-  background: rgba(40,25,70,0.30);
+  border: 1px solid rgba(111,255,233,0.34);
+  background: rgba(5,35,45,0.62);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
-  border-radius: 10px;
+  border-radius: 0;
   padding: 10px 12px;
   margin-bottom: 10px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.30);
@@ -177,7 +174,7 @@ html, body {
   line-height: 1.6;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #F6C6E0;
+  color: #6FFFE9;
   margin-bottom: 8px;
   text-align: center;
 }
@@ -190,13 +187,13 @@ html, body {
 .brand-label {
   font-size: 10px;
   letter-spacing: 2px;
-  color: #A780FF;
+  color: #4CC9F0;
   margin-bottom: 10px;
   text-align: center;
 }
 .date-fr {
   font-size: 19px;
-  color: #E4E4E9;
+  color: #C7E8E1;
   letter-spacing: 0.6px;
   text-transform: capitalize;
   text-align: center;
@@ -205,7 +202,7 @@ html, body {
   font-size: 34px;
   line-height: 44px;
   letter-spacing: 2px;
-  color: #FFFFFF;
+  color: #E9FFF7;
   font-variant-numeric: tabular-nums;
   text-align: center;
   margin-top: 8px;
@@ -222,7 +219,7 @@ html, body {
 .weather-left {
   width: 60%;
   padding-right: 10px;
-  border-right: 2px dashed rgba(184,140,255,0.35);
+  border-right: 2px dashed rgba(76,201,240,0.42);
 }
 .weather-right {
   width: 40%;
@@ -237,11 +234,11 @@ html, body {
   justify-content: center;
   margin-bottom: 4px;
 }
-.weather-temp { font-size: 50px; font-weight: bold; color: #FFFFFF; }
+.weather-temp { font-size: 50px; font-weight: bold; color: #E9FFF7; }
 .weather-icon { font-size: 40px; margin-left: 10px; }
 .weather-sub {
   font-size: 17px;
-  color: #C7C7CC;
+  color: #9FC5BD;
   line-height: 1.3;
   text-align: center;
 }
@@ -252,7 +249,7 @@ html, body {
   justify-content: space-between;
   margin-top: 10px;
   padding-top: 8px;
-  border-top: 2px dashed rgba(184,140,255,0.3);
+  border-top: 2px dashed rgba(76,201,240,0.32);
 }
 .forecast-day {
   flex: 1;
@@ -260,13 +257,13 @@ html, body {
 }
 .forecast-day-label {
   font-size: 8px;
-  color: #A780FF;
+  color: #4CC9F0;
   margin-bottom: 4px;
 }
 .forecast-day-icon { font-size: 18px; }
 .forecast-day-temp {
   font-size: 14px;
-  color: #E4E4E9;
+  color: #C7E8E1;
   margin-top: 2px;
 }
 
@@ -274,21 +271,21 @@ html, body {
   text-align: center;
   padding-bottom: 10px;
   margin-bottom: 10px;
-  border-bottom: 2px dashed rgba(184,140,255,0.3);
+  border-bottom: 2px dashed rgba(76,201,240,0.32);
 }
 .moon-emoji { font-size: 34px; }
-.moon-label { font-size: 14px; color: #FFD447; margin-top: 6px; }
+.moon-label { font-size: 14px; color: #FFB703; margin-top: 6px; }
 .sun-panel { text-align: center; }
 .sun-time {
   font-size: 17px;
-  color: #FFFFFF;
+  color: #E9FFF7;
   margin: 4px 0;
 }
 
 /* RAPPELS */
 .widget.reminder {
-  border-color: #F6C6E0;
-  background: rgba(70,20,55,0.35);
+  border-color: #6FFFE9;
+  background: rgba(0,70,65,0.42);
   text-align: center;
   font-size: 17px;
   padding: 12px;
@@ -297,8 +294,8 @@ html, body {
 
 /* BARRE DE PROGRESSION 28 JOURS */
 .progress-bar-outer {
-  border: 3px solid #FFFFFF;
-  border-radius: 5px;
+  border: 3px solid #E9FFF7;
+  border-radius: 0;
   height: 22px;
   background: rgba(255,255,255,0.08);
   margin-top: 6px;
@@ -310,13 +307,13 @@ html, body {
   width: 0%;
   background-image: repeating-linear-gradient(
     90deg,
-    #FFFFFF 0px, #FFFFFF 6px,
-    #F6C6E0 6px, #F6C6E0 12px,
-    #A780FF 12px, #A780FF 18px,
-    #FFD447 18px, #FFD447 20px
+    #E9FFF7 0px, #E9FFF7 6px,
+    #6FFFE9 6px, #6FFFE9 12px,
+    #4CC9F0 12px, #4CC9F0 18px,
+    #FFB703 18px, #FFB703 20px
   );
 }
-.progress-day-label { font-size: 10px; color: #FFFFFF; }
+.progress-day-label { font-size: 10px; color: #E9FFF7; }
 .progress-info {
   display: flex;
   align-items: center;
@@ -350,13 +347,13 @@ html, body {
   font-family: 'VT323', inherit;
   min-width: 0;
 }
-.shopping-input input::placeholder { color: #C7C7CC; opacity: 0.55; }
-.shopping-input input:focus { border-color: #F6C6E0; }
+.shopping-input input::placeholder { color: #9FC5BD; opacity: 0.55; }
+.shopping-input input:focus { border-color: #6FFFE9; }
 .btn-add {
   position: relative;
-  background: #FFFFFF;
-  border: 2px solid #A780FF;
-  border-radius: 6px;
+  background: #E9FFF7;
+  border: 2px solid #4CC9F0;
+  border-radius: 0;
   width: 40px;
   height: 40px;
   margin-left: 8px;
@@ -385,14 +382,14 @@ html, body {
   display: flex;
   align-items: center;
   padding: 7px 0;
-  border-bottom: 2px dashed rgba(255,255,255,0.15);
+  border-bottom: 2px dashed rgba(111,255,233,0.16);
   font-size: 18px;
 }
-.shop-check { width: 20px; height: 20px; accent-color: #FFD447; margin-right: 10px; }
+.shop-check { width: 20px; height: 20px; accent-color: #FFB703; margin-right: 10px; }
 .shop-item.done span { text-decoration: line-through; opacity: 0.35; }
 .shop-item span { flex: 1; }
 .btn-del { background: none; border: none; color: #fff; opacity: 0.4; font-size: 17px; padding: 0 6px; }
-.shopping-status { flex: 0 0 auto; font-size: 14px; color: #9A9AA0; margin-top: 6px; text-align: center; }
+.shopping-status { flex: 0 0 auto; font-size: 14px; color: #71938D; margin-top: 6px; text-align: center; }
 
 /* RADIOS */
 .audio-buttons {
@@ -402,37 +399,37 @@ html, body {
   justify-content: center;
 }
 .radio-btn {
-  border: 2px solid #FFFFFF;
-  border-radius: 6px;
+  border: 2px solid #E9FFF7;
+  border-radius: 0;
   background: rgba(255,255,255,0.08);
-  color: #F5F5F7;
+  color: #E9FFF7;
   font-size: 10px;
   line-height: 1.5;
   padding: 10px 10px;
   margin: 5px;
   box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
 }
-.radio-btn.active { background: #A780FF; color: #1A0F2E; border-color: #FFFFFF; }
+.radio-btn.active { background: #4CC9F0; color: #061A25; border-color: #E9FFF7; }
 .radio-btn:active { box-shadow: 1px 1px 0 rgba(0,0,0,0.5); transform: translate(2px,2px); }
-.audio-status { font-size: 14px; color: #9A9AA0; margin-top: 10px; text-align: center; }
+.audio-status { font-size: 14px; color: #71938D; margin-top: 10px; text-align: center; }
 
 /* POMODORO */
 .widget.pomodoro { text-align: center; }
 .pomodoro-label {
-  font-family: 'Silkscreen', monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 11px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: #A780FF;
+  color: #4CC9F0;
   margin-bottom: 6px;
 }
 .pomodoro-time {
-  font-family: 'Silkscreen', monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 44px;
   letter-spacing: 2px;
-  color: #FFFFFF;
+  color: #E9FFF7;
   font-variant-numeric: tabular-nums;
-  text-shadow: 3px 3px 0 rgba(167,128,255,0.4);
+  text-shadow: 3px 3px 0 rgba(76,201,240,0.45);
   margin-bottom: 12px;
 }
 .pomodoro-dots {
@@ -443,12 +440,12 @@ html, body {
 .pomo-dot {
   width: 10px;
   height: 10px;
-  border: 2px solid #FFFFFF;
-  border-radius: 2px;
+  border: 2px solid #E9FFF7;
+  border-radius: 0;
   background: rgba(255,255,255,0.08);
   margin: 0 4px;
 }
-.pomo-dot.filled { background: #FFD447; border-color: #FFD447; }
+.pomo-dot.filled { background: #FFB703; border-color: #FFB703; }
 .pomodoro-controls {
   display: flex;
   align-items: center;
@@ -456,14 +453,14 @@ html, body {
 }
 .btn-pomo {
   position: relative;
-  font-family: 'Silkscreen', monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 16px;
   width: 48px;
   height: 48px;
-  background: linear-gradient(180deg, #FDE3F0 0%, #F6C6E0 55%, #EFAFD4 100%);
-  color: #6B2456;
-  border: 2px solid #FFFFFF;
-  border-radius: 4px;
+  background: linear-gradient(180deg, #8AF3E8 0%, #6FFFE9 55%, #35C9B8 100%);
+  color: #062A2A;
+  border: 2px solid #E9FFF7;
+  border-radius: 0;
   margin: 0 7px;
   -webkit-clip-path: polygon(
     6px 0, calc(100% - 6px) 0, 100% 6px,
@@ -475,27 +472,27 @@ html, body {
     100% calc(100% - 6px), calc(100% - 6px) 100%,
     6px 100%, 0 calc(100% - 6px), 0 6px
   );
-  box-shadow: 0 5px 0 #C983AC, 0 8px 8px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.8);
+  box-shadow: 0 5px 0 #168F86, 0 8px 8px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.8);
   transition: transform 0.05s ease, box-shadow 0.05s ease;
 }
 .btn-pomo:active {
   transform: translateY(5px);
-  box-shadow: 0 0 0 #C983AC, 0 2px 3px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.8);
+  box-shadow: 0 0 0 #168F86, 0 2px 3px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.8);
 }
 .btn-pomo-secondary {
   width: 38px;
   height: 38px;
   font-size: 14px;
-  background: rgba(255,255,255,0.10);
-  color: #FFD447;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.45), 0 6px 6px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.15);
+  background: rgba(111,255,233,0.10);
+  color: #FFB703;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.45), 0 6px 6px rgba(0,0,0,0.3), inset 0 2px 0 rgba(111,255,233,0.16);
 }
 .btn-pomo-secondary:active {
   transform: translateY(4px);
-  box-shadow: 0 0 0 rgba(0,0,0,0.45), 0 2px 3px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.15);
+  box-shadow: 0 0 0 rgba(0,0,0,0.45), 0 2px 3px rgba(0,0,0,0.3), inset 0 2px 0 rgba(111,255,233,0.16);
 }
 
-/* JE M'ENNUIE — encart compact (de la place est prévue en dessous) */
+/* LANCER UNE QUÊTE — encart compact (de la place est prévue en dessous) */
 .widget.bored {
   flex: 0 0 auto;
   display: flex;
@@ -508,10 +505,10 @@ html, body {
 .btn-pixel {
   position: relative;
   font-size: 13px;
-  background: linear-gradient(180deg, #FDE3F0 0%, #F6C6E0 55%, #EFAFD4 100%);
-  color: #6B2456;
-  border: 3px solid #FFFFFF;
-  border-radius: 4px;
+  background: linear-gradient(180deg, #8AF3E8 0%, #6FFFE9 55%, #35C9B8 100%);
+  color: #062A2A;
+  border: 3px solid #E9FFF7;
+  border-radius: 0;
   padding: 16px 22px;
   margin-top: 4px;
   -webkit-clip-path: polygon(
@@ -525,7 +522,7 @@ html, body {
     9px 100%, 0 calc(100% - 9px), 0 9px
   );
   box-shadow:
-    0 6px 0 #C983AC,
+    0 6px 0 #168F86,
     0 11px 14px rgba(0,0,0,0.45),
     inset 0 2px 0 rgba(255,255,255,0.85),
     inset 0 -3px 0 rgba(201,131,172,0.5);
@@ -536,7 +533,7 @@ html, body {
 .btn-pixel:active {
   transform: translateY(6px);
   box-shadow:
-    0 0px 0 #C983AC,
+    0 0px 0 #168F86,
     0 3px 5px rgba(0,0,0,0.45),
     inset 0 2px 0 rgba(255,255,255,0.85),
     inset 0 -3px 0 rgba(201,131,172,0.5);
@@ -547,7 +544,7 @@ html, body {
   margin-top: 4px;
   line-height: 1.4;
   padding: 4px 8px;
-  color: #A780FF;
+  color: #4CC9F0;
 }
 .bored-reset {
   display: none;
@@ -555,8 +552,8 @@ html, body {
   height: 34px;
   line-height: 28px;
   background: rgba(0,0,0,0.35);
-  border: 2px solid #FFFFFF;
-  border-radius: 4px;
+  border: 2px solid #E9FFF7;
+  border-radius: 0;
   -webkit-clip-path: polygon(
     5px 0, calc(100% - 5px) 0, 100% 5px,
     100% calc(100% - 5px), calc(100% - 5px) 100%,
@@ -567,9 +564,9 @@ html, body {
     100% calc(100% - 5px), calc(100% - 5px) 100%,
     5px 100%, 0 calc(100% - 5px), 0 5px
   );
-  font-family: 'Silkscreen', 'VT323', monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 16px;
-  color: #FFD447;
+  color: #FFB703;
   text-align: center;
   padding: 0;
   margin-top: 12px;
@@ -581,7 +578,27 @@ html, body {
   box-shadow: 0 0px 0 rgba(0,0,0,0.5), 0 2px 3px rgba(0,0,0,0.3);
 }
 
-.deco-star { color: #FFD447; opacity: 0.95; font-size: 20px; vertical-align: middle; }
+.deco-star { color: #FFB703; opacity: 0.95; font-size: 20px; vertical-align: middle; }
+
+/* ==========================================================================
+   SURCOUCHE CRT AUTONOME — pure CSS, aucun asset externe
+   ========================================================================== */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,0.035) 0px,
+    rgba(0,0,0,0.035) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.55;
+}
+
 </style>
 </head>
 <body>
@@ -595,17 +612,17 @@ html, body {
     <div class="col-left">
 
       <div class="widget brand-clock">
-        <div class="brand-label">✦ Momo's Dashboard ✦</div>
+        <div class="brand-label">◆ Momo's Dashboard ◆</div>
         <div class="date-fr" id="date-fr">--</div>
         <div class="clock" id="clock">--:--:--</div>
       </div>
 
       <div class="widget weather-block">
         <div class="weather-left">
-          <div class="widget-title">Météo · Paris</div>
+          <div class="widget-title">MÉTÉO // PARIS</div>
           <div class="weather-main">
             <div class="weather-temp" id="weather-temp">--°</div>
-            <div class="weather-icon" id="weather-icon">☁️</div>
+            <div class="weather-icon" id="weather-icon">☁</div>
           </div>
           <div class="weather-sub" id="weather-desc">Chargement…</div>
           <div class="forecast-row" id="forecast-row"></div>
@@ -613,12 +630,12 @@ html, body {
         <div class="weather-right">
           <div class="moon-panel">
             <div class="widget-title">Lune</div>
-            <div class="moon-emoji" id="moon-emoji">🌑</div>
+            <div class="moon-emoji" id="moon-emoji">●</div>
             <div class="moon-label" id="moon-label">Calcul…</div>
           </div>
           <div class="sun-panel">
             <div class="widget-title">Soleil</div>
-            <div class="sun-time" id="sun-rise">☀️ --:--</div>
+            <div class="sun-time" id="sun-rise">☼ --:--</div>
             <div class="sun-time" id="sun-set">🌙 --:--</div>
           </div>
         </div>
@@ -633,12 +650,12 @@ html, body {
         </div>
         <div class="progress-info">
           <span class="progress-day-label" id="progress-day-label">JOUR --/28</span>
-          <span class="progress-flower" id="progress-flower" onclick="resetProgress()" title="Toucher pour réinitialiser">🌸</span>
+          <span class="progress-flower" id="progress-flower" onclick="resetProgress()" title="Toucher pour réinitialiser">✿</span>
         </div>
       </div>
 
       <div class="widget shopping">
-        <div class="widget-title"><span class="deco-star">✦</span> Liste de courses <span class="deco-star">✦</span></div>
+        <div class="widget-title"><span class="deco-star">◆</span> INVENTAIRE <span class="deco-star">◆</span></div>
         <div class="shopping-input">
           <input id="shop-input" type="text" placeholder="Ajouter un article…" maxlength="60">
           <button class="btn-add" onclick="addItem()" aria-label="Ajouter"></button>
@@ -653,7 +670,7 @@ html, body {
     <div class="col-right">
 
       <div class="widget audio">
-        <div class="widget-title"><span class="deco-star">✦</span> Radios <span class="deco-star">✦</span></div>
+        <div class="widget-title"><span class="deco-star">◆</span> RADIO // ONDE <span class="deco-star">◆</span></div>
         <div class="audio-buttons">
           <button class="radio-btn" id="btn-nova" onclick="playRadio('nova')">Radio Nova</button>
           <button class="radio-btn" id="btn-tsfjazz" onclick="playRadio('tsfjazz')">TSF Jazz</button>
@@ -666,22 +683,22 @@ html, body {
       </div>
 
       <div class="widget pomodoro">
-        <div class="widget-title"><span class="deco-star">✦</span> Pomodoro <span class="deco-star">✦</span></div>
+        <div class="widget-title"><span class="deco-star">◆</span> FOCUS // TIMER <span class="deco-star">◆</span></div>
         <div class="pomodoro-label" id="pomodoro-label">Travail</div>
         <div class="pomodoro-time" id="pomodoro-time">25:00</div>
         <div class="pomodoro-dots" id="pomodoro-dots"></div>
         <div class="pomodoro-controls">
-          <button class="btn-pomo btn-pomo-secondary" onclick="resetPomodoro()" aria-label="Réinitialiser" title="Réinitialiser">↺</button>
-          <button class="btn-pomo" id="pomodoro-startpause" onclick="togglePomodoro()" aria-label="Démarrer / Pause" title="Démarrer / Pause">▶</button>
-          <button class="btn-pomo btn-pomo-secondary" onclick="skipPomodoro()" aria-label="Passer" title="Passer à la phase suivante">⏭</button>
+          <button class="btn-pomo btn-pomo-secondary" onclick="resetFOCUS // TIMER()" aria-label="Réinitialiser" title="Réinitialiser">↻</button>
+          <button class="btn-pomo" id="pomodoro-startpause" onclick="toggleFOCUS // TIMER()" aria-label="Démarrer / Pause" title="Démarrer / Pause">▷</button>
+          <button class="btn-pomo btn-pomo-secondary" onclick="skipFOCUS // TIMER()" aria-label="Passer" title="Passer à la phase suivante">»</button>
         </div>
       </div>
 
       <div class="widget bored">
-        <div class="widget-title"><span class="deco-star">✦</span> Petit creux d'inspiration <span class="deco-star">✦</span></div>
-        <button class="btn-pixel" id="bored-btn" onclick="showActivity()">JE M'ENNUIE</button>
+        <div class="widget-title"><span class="deco-star">◆</span> MODE EXPLORATION <span class="deco-star">◆</span></div>
+        <button class="btn-pixel" id="bored-btn" onclick="showActivity()">LANCER UNE QUÊTE</button>
         <div class="bored-result" id="bored-result"></div>
-        <button class="bored-reset" id="bored-reset" onclick="resetBored()" aria-label="Réinitialiser" title="Réinitialiser">↺</button>
+        <button class="bored-reset" id="bored-reset" onclick="resetBored()" aria-label="Réinitialiser" title="Réinitialiser">↻</button>
       </div>
 
     </div>
@@ -794,10 +811,10 @@ function updateClockAndDate() {
 /* ----------------------------------------------------------------------
    2bis. FOND DYNAMIQUE CONTINU
    ---------------------------------------------------------------------- */
-var NIGHT_TOP = [20, 30, 60];      // #141E3C — bleu nuit profond
-var NIGHT_BOTTOM = [25, 10, 40];   // #190A28 — violet très sombre
-var DAY_TOP = [180, 225, 250];     // #B4E1FA — bleu pastel lumineux
-var DAY_BOTTOM = [155, 120, 210];  // #9B78D2 — violet doux
+var NIGHT_TOP = [20, 30, 60];      // #07111F — bleu nuit profond
+var NIGHT_BOTTOM = [25, 10, 40];   // #0B1726 — violet très sombre
+var DAY_TOP = [180, 225, 250];     // #5EDFFF — bleu pastel lumineux
+var DAY_BOTTOM = [155, 120, 210];  // #176B8A — violet doux
 
 function daylightFactor(now) {
   var hour = now.getHours() + now.getMinutes() / 60;
@@ -838,9 +855,9 @@ function checkReminder(now) {
   var message = null;
 
   if (day === 1 && hour >= 6 && hour < 12) {
-    message = "✦ Prends ta B12 ✦";
+    message = "◆ Prends ta B12 ◆";
   } else if (day === 5 && hour >= 6 && hour < 12) {
-    message = "✦ Arrose les plantes ✦";
+    message = "◆ Arrose les plantes ◆";
   }
 
   if (message) {
@@ -891,7 +908,7 @@ function renderShoppingList() {
         (item.done ? 'checked="checked" ' : '') +
         'onclick="toggleItem(' + i + ')">' +
         '<span>' + escapeHtml(item.text) + '</span>' +
-        '<button class="btn-del" onclick="deleteItem(' + i + ')">✕</button>' +
+        '<button class="btn-del" onclick="deleteItem(' + i + ')">×</button>' +
         '</li>';
     }
     listEl.innerHTML = html;
@@ -952,29 +969,29 @@ var WEATHER_LON = 2.3522;
 
 function decodeWeatherCode(code) {
   var table = {
-    0: { icon: "☀️", label: "Ciel dégagé" },
-    1: { icon: "🌤️", label: "Plutôt dégagé" },
-    2: { icon: "⛅", label: "Partiellement nuageux" },
-    3: { icon: "☁️", label: "Couvert" },
-    45: { icon: "🌫️", label: "Brouillard" },
-    48: { icon: "🌫️", label: "Brouillard givrant" },
-    51: { icon: "🌦️", label: "Bruine légère" },
-    53: { icon: "🌦️", label: "Bruine" },
-    55: { icon: "🌦️", label: "Bruine forte" },
-    61: { icon: "🌧️", label: "Pluie légère" },
-    63: { icon: "🌧️", label: "Pluie" },
-    65: { icon: "🌧️", label: "Pluie forte" },
-    71: { icon: "🌨️", label: "Neige légère" },
-    73: { icon: "🌨️", label: "Neige" },
-    75: { icon: "❄️", label: "Neige forte" },
-    80: { icon: "🌦️", label: "Averses" },
-    81: { icon: "🌦️", label: "Averses fortes" },
-    95: { icon: "⛈️", label: "Orage" },
-    96: { icon: "⛈️", label: "Orage + grêle" },
-    99: { icon: "⛈️", label: "Orage violent" }
+    0: { icon: "☼", label: "Ciel dégagé" },
+    1: { icon: "◒", label: "Plutôt dégagé" },
+    2: { icon: "◐", label: "Partiellement nuageux" },
+    3: { icon: "☁", label: "Couvert" },
+    45: { icon: "≋", label: "Brouillard" },
+    48: { icon: "≋", label: "Brouillard givrant" },
+    51: { icon: "☂", label: "Bruine légère" },
+    53: { icon: "☂", label: "Bruine" },
+    55: { icon: "☂", label: "Bruine forte" },
+    61: { icon: "☂", label: "Pluie légère" },
+    63: { icon: "☂", label: "Pluie" },
+    65: { icon: "☂", label: "Pluie forte" },
+    71: { icon: "❄", label: "Neige légère" },
+    73: { icon: "❄", label: "Neige" },
+    75: { icon: "❄", label: "Neige forte" },
+    80: { icon: "☂", label: "Averses" },
+    81: { icon: "☂", label: "Averses fortes" },
+    95: { icon: "ϟ", label: "Orage" },
+    96: { icon: "ϟ", label: "Orage + grêle" },
+    99: { icon: "ϟ", label: "Orage violent" }
   };
   if (table[code]) { return table[code]; }
-  return { icon: "❓", label: "Inconnu" };
+  return { icon: "?", label: "Inconnu" };
 }
 
 function renderForecast(daily) {
@@ -1020,8 +1037,8 @@ function refreshWeather() {
           var sunrise = data.daily.sunrise[0].substr(11, 5);
           var sunset = data.daily.sunset[0].substr(11, 5);
           // Libellés texte "Lever"/"Coucher" volontairement absents :
-          // seules les icônes ☀️ / 🌙 accompagnent les horaires.
-          document.getElementById("sun-rise").innerHTML = "☀️ " + sunrise;
+          // seules les icônes ☼ / 🌙 accompagnent les horaires.
+          document.getElementById("sun-rise").innerHTML = "☼ " + sunrise;
           document.getElementById("sun-set").innerHTML = "🌙 " + sunset;
         }
         renderForecast(data.daily);
@@ -1041,7 +1058,7 @@ function getMoonPhase(date) {
   if (phase < 0) { phase += synodicMonth; }
   var fraction = phase / synodicMonth;
 
-  var emojis = ["🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘"];
+  var emojis = ["●", "◔", "◑", "◕", "○", "◕", "◑", "◔"];
   var labels = ["Nouvelle lune", "Premier croissant", "Premier quartier",
                 "Gibbeuse croissante", "Pleine lune", "Gibbeuse décroissante",
                 "Dernier quartier", "Dernier croissant"];
@@ -1108,7 +1125,7 @@ function resetProgress() {
 
 
 /* ----------------------------------------------------------------------
-   7. "JE M'ENNUIE" — TIRAGE D'UNE ACTIVITE AU HASARD
+   7. "LANCER UNE QUÊTE" — TIRAGE D'UNE ACTIVITE AU HASARD
    ---------------------------------------------------------------------- */
 var BORED_ACTIVITIES = [
   "Ranger un endroit que je n'ai pas rangé depuis longtemps",
@@ -1164,13 +1181,13 @@ var pomodoroState = {
 
 var pomodoroAudioCtx = null;
 
-function formatPomodoroTime(totalSeconds) {
+function formatFOCUS // TIMERTime(totalSeconds) {
   var m = Math.floor(totalSeconds / 60);
   var s = totalSeconds % 60;
   return pad2(m) + ":" + pad2(s);
 }
 
-function renderPomodoroDots() {
+function renderFOCUS // TIMERDots() {
   var container = document.getElementById("pomodoro-dots");
   if (!container) { return; }
   var completedInCycle = pomodoroState.cyclesCompleted % 4;
@@ -1182,20 +1199,20 @@ function renderPomodoroDots() {
   container.innerHTML = html;
 }
 
-function updatePomodoroDisplay() {
+function updateFOCUS // TIMERDisplay() {
   var timeEl = document.getElementById("pomodoro-time");
   var labelEl = document.getElementById("pomodoro-label");
-  if (timeEl) { timeEl.innerHTML = formatPomodoroTime(pomodoroState.remaining); }
+  if (timeEl) { timeEl.innerHTML = formatFOCUS // TIMERTime(pomodoroState.remaining); }
   if (labelEl) {
     var label = "Travail";
     if (pomodoroState.mode === "break") { label = "Pause"; }
     else if (pomodoroState.mode === "longbreak") { label = "Pause longue"; }
     labelEl.innerHTML = label;
   }
-  renderPomodoroDots();
+  renderFOCUS // TIMERDots();
 }
 
-function advancePomodoroMode() {
+function advanceFOCUS // TIMERMode() {
   if (pomodoroState.mode === "work") {
     pomodoroState.cyclesCompleted++;
     if (pomodoroState.cyclesCompleted % 4 === 0) {
@@ -1211,7 +1228,7 @@ function advancePomodoroMode() {
   }
 }
 
-function ensurePomodoroAudio() {
+function ensureFOCUS // TIMERAudio() {
   if (!pomodoroAudioCtx) {
     var Ctx = window.AudioContext || window.webkitAudioContext;
     if (Ctx) {
@@ -1223,7 +1240,7 @@ function ensurePomodoroAudio() {
   }
 }
 
-function playPomodoroBeep(ctx, delaySeconds, frequency) {
+function playFOCUS // TIMERBeep(ctx, delaySeconds, frequency) {
   try {
     var osc = ctx.createOscillator();
     var gain = ctx.createGain();
@@ -1241,59 +1258,59 @@ function playPomodoroBeep(ctx, delaySeconds, frequency) {
 }
 
 function pomodoroAlarm() {
-  ensurePomodoroAudio();
+  ensureFOCUS // TIMERAudio();
   if (!pomodoroAudioCtx) { return; }
-  playPomodoroBeep(pomodoroAudioCtx, 0, 880);
-  playPomodoroBeep(pomodoroAudioCtx, 0.45, 880);
-  playPomodoroBeep(pomodoroAudioCtx, 0.9, 1175);
+  playFOCUS // TIMERBeep(pomodoroAudioCtx, 0, 880);
+  playFOCUS // TIMERBeep(pomodoroAudioCtx, 0.45, 880);
+  playFOCUS // TIMERBeep(pomodoroAudioCtx, 0.9, 1175);
 }
 
 function pomodoroTick() {
   pomodoroState.remaining--;
   if (pomodoroState.remaining <= 0) {
     pomodoroAlarm();
-    advancePomodoroMode();
+    advanceFOCUS // TIMERMode();
   }
-  updatePomodoroDisplay();
+  updateFOCUS // TIMERDisplay();
 }
 
-function startPomodoro() {
+function startFOCUS // TIMER() {
   if (pomodoroState.running) { return; }
-  ensurePomodoroAudio();
+  ensureFOCUS // TIMERAudio();
   pomodoroState.running = true;
   var btn = document.getElementById("pomodoro-startpause");
-  if (btn) { btn.innerHTML = "❚❚"; }
+  if (btn) { btn.innerHTML = "Ⅱ"; }
   pomodoroState.intervalId = setInterval(pomodoroTick, 1000);
 }
 
-function pausePomodoro() {
+function pauseFOCUS // TIMER() {
   pomodoroState.running = false;
   var btn = document.getElementById("pomodoro-startpause");
-  if (btn) { btn.innerHTML = "▶"; }
+  if (btn) { btn.innerHTML = "▷"; }
   if (pomodoroState.intervalId) {
     clearInterval(pomodoroState.intervalId);
     pomodoroState.intervalId = null;
   }
 }
 
-function togglePomodoro() {
-  if (pomodoroState.running) { pausePomodoro(); } else { startPomodoro(); }
+function toggleFOCUS // TIMER() {
+  if (pomodoroState.running) { pauseFOCUS // TIMER(); } else { startFOCUS // TIMER(); }
 }
 
-function skipPomodoro() {
+function skipFOCUS // TIMER() {
   var wasRunning = pomodoroState.running;
-  pausePomodoro();
-  advancePomodoroMode();
-  updatePomodoroDisplay();
-  if (wasRunning) { startPomodoro(); }
+  pauseFOCUS // TIMER();
+  advanceFOCUS // TIMERMode();
+  updateFOCUS // TIMERDisplay();
+  if (wasRunning) { startFOCUS // TIMER(); }
 }
 
-function resetPomodoro() {
-  pausePomodoro();
+function resetFOCUS // TIMER() {
+  pauseFOCUS // TIMER();
   pomodoroState.mode = "work";
   pomodoroState.remaining = POMODORO_WORK_MIN * 60;
   pomodoroState.cyclesCompleted = 0;
-  updatePomodoroDisplay();
+  updateFOCUS // TIMERDisplay();
 }
 
 
@@ -1420,7 +1437,7 @@ function initDashboard() {
   }, "barre de progression");
 
   safeRun(function () {
-    updatePomodoroDisplay();
+    updateFOCUS // TIMERDisplay();
   }, "pomodoro");
 }
 
